@@ -1,8 +1,9 @@
 import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup } from 'react-bootstrap/'
-import { useState,  } from 'react';
+import { useState, } from 'react';
 import { } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import OrderConfimComp from './orderConfirm';
+import utils from './utils';
 
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
@@ -27,7 +28,10 @@ function getTotal(num, mail) {
 
 function CheckOutComp(props) {
 
-    const [order ] = useState(
+    const [member ] = useState( 
+        getSessionStorageOrDefault('member',false)
+    )
+    const [order] = useState(
         getSessionStorageOrDefault('order', false)
     );
     const [total] = useState(
@@ -35,7 +39,7 @@ function CheckOutComp(props) {
     )
     const [value, setValue] = useState(false)
 
-    const [confirm , setConfirm] = useState(false)
+    const [confirm, setConfirm] = useState(false)
     // useEffect(() => {
 
     //     setPackCounter(props.order.order_data.length)
@@ -64,34 +68,31 @@ function CheckOutComp(props) {
     const handleChange = (val) => setValue(val);
 
     const sendOrder = async () => {
-        if(value===false)
-        {
+        if (value === false) {
             alert(
-                 "לאחר השלמת התשלום ההזמנה תישלח")
+                "לאחר השלמת התשלום ההזמנה תישלח")
             window.open(
                 'https://payboxapp.page.link/n6pMSuHkmp4j7D6d7',
-                '_blank'  
-              );
-            let resp = await ordersUtils.addNewOrder(order)
-            console.log(resp.data)
-           
+                '_blank'
+            );
+        }
+       
+        let resp = await ordersUtils.addNewOrder(order)
+        console.log(resp.data._id)
 
-        }
-        else
-        {
-            let resp = await ordersUtils.addNewOrder(order)
-            console.log(resp.data)
-        }
-         setConfirm(true)
+
+          member.orders.push(resp.data._id)
+         let resp2 = await utils.updateMember(member,member._id)
+          
+        setConfirm(true)
 
 
     }
 
 
-    if(confirm)
-    {
-        return(
-            <OrderConfimComp order={order}/>
+    if (confirm) {
+        return (
+            <OrderConfimComp order={order} />
         )
     }
 
@@ -115,17 +116,17 @@ function CheckOutComp(props) {
 
                             </ListGroup>
                         </Card.Text>
-                         
 
 
 
 
-                        <Card.Header size="lg"> סה"כ לתשלום - {total + " שקלים "}<br/>
+
+                        <Card.Header size="lg"> סה"כ לתשלום - {total + " שקלים "}<br />
                             בחר את דרך התשלום המועדפת <br />
 
 
                             <ButtonGroup toggle>
-                              
+
                                 <ToggleButtonGroup type="radio" name="options" onChange={handleChange}   >
 
                                     <ToggleButton value={false}>payBox</ToggleButton>
@@ -138,13 +139,13 @@ function CheckOutComp(props) {
 
 
                     </Card.Body>
-                    <ButtonGroup style={{ display: value ?'none' : 'block'}} >
+                    <ButtonGroup style={{ display: value ? 'none' : 'block' }} >
 
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
-                            
-                                paybox  שלח הזמנה ומעבר לתשלום ב
-                             
-                        </Button>  
+
+                            paybox  שלח הזמנה ומעבר לתשלום ב
+
+                        </Button>
 
                     </ButtonGroup>
                     <ButtonGroup style={{ display: value ? 'block' : 'none' }} >

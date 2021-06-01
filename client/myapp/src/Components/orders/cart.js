@@ -10,15 +10,15 @@ import CheckOutComp from './checkOut'
 function CartComp(props) {
     // const [mailbox, setMailbox] = useState(false)
     // const [packCounter, setCounter] = useState(props.packCont)
-    // const [order, setOrder] = useState(props.order)
-    const [checkOut, setCheckOut] = useState(false);
+       const [order, setOrder] = useState(props.order)
+       const [checkOut, setCheckOut] = useState(false);
 
      
-    const sendForm = () => {
+     const sendForm = () => {
         setCheckOut(true)
 
         sessionStorage.setItem('order', JSON.stringify(props.order));
-        sessionStorage['memberid'] = props.memberid;
+        sessionStorage.setItem('memberid',JSON.stringify(props.memberid));
 
     }
 
@@ -36,25 +36,25 @@ function CartComp(props) {
     //     }
     // }
     useEffect(() => {
+       
+        
 
-
-
-    }, [])
+    }, [ ])
 
     if (checkOut) {
         return (
             <div>
                 <CheckOutComp order={props.order} />
             </div>
-
         )
     }
-
+     
+    
     return (
         <div>
             <div className="d-flex justify-content-end">
 
-                <Card style={{ width: '40rem' }}>
+                <Card style={{ width: '40rem' , margin : 'auto' }}>
                     <Card.Header  >{props.packCont} - פריטים להזמנה</Card.Header>
                     <ListGroup variant="flush">
                         {props.order.order_data.map((item, index) => {
@@ -75,7 +75,7 @@ function CartComp(props) {
 
 
                     </ListGroup>
-                    <Link to="/checkout"> <Button variant="outline-info" onClick={sendForm} > המשך לסיום הזמנה</Button>  </Link>
+                    <Link to="/checkout" style={{display :  props.order.order_data.length? 'block' : 'none'}}> <Button variant="outline-info" onClick={sendForm} > המשך לסיום הזמנה</Button>  </Link>
                 </Card>
 
             </div>

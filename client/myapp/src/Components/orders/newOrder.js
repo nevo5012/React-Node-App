@@ -40,23 +40,25 @@ function NewOrderComp(props) {
 
     const [validated, setValidated] = useState(false);
 
+    const [ showButton, setShowButton] = useState(false)
+
     const handleSubmit = (event) => {
         const form = event.currentTarget;
         var conditions = ["ח","ר","ג"];
-        if(conditions.some(e=>shelfNum.includes( e) ) )
+        if(!conditions.some(e=>shelfNum.includes(e)))
           {
-              alert("yes")
+              
           }
-           if (form.checkValidity() === false) {
+           if(form.checkValidity() === false ) {
             event.preventDefault();
             event.stopPropagation();
-        }
+            }
          
 
         else {
-
-            let numOfPack = packCont
+             let numOfPack = packCont
             event.preventDefault();
+            setShowButton(true)
             let obj = { shelf_number: shelfNum, tracking_number: trackNum };
 
             newOrder.order_data.push(obj);
@@ -87,6 +89,7 @@ function NewOrderComp(props) {
     async function getOneMember() {
         let resp = await utils.getMember(id)
         setMember(resp.data)
+        sessionStorage.setItem('member', JSON.stringify(resp.data));
     }
 
     useEffect(() => {
@@ -98,7 +101,7 @@ function NewOrderComp(props) {
     }, [orderId])
 
     return (
-        <div style={{ overflow: 'auto', margin: '90' }}>
+        <div style={{ overflow: 'auto',   }}>
             <div className="main">
                 <Card border="info" style={{ width: 'auto', margin: 'auto' }} >
                     <Card.Header> <Card.Title>להזמנת משלוח אנא מלא את הפרטים</Card.Title>  </Card.Header>
@@ -110,8 +113,9 @@ function NewOrderComp(props) {
                                     type="text"
                                     maxlength="5"
                                     minLength="2"
-                                    
+
                                     required
+                                    
                                     onChange={e => setShelfNum(e.target.value)}
                                     placeholder="הכנס מספר מדף (לדוגמא ג'124)" /><Form.Control.Feedback type="invalid">
                                     נא להכניס מספר מדף תקין 
@@ -122,13 +126,13 @@ function NewOrderComp(props) {
                                     maxlength="13"
                                     minLength="13"
                                     required
-                                    onSubmit={e => e.target.reset()}
-                                    onChange={e => settrackNum(e.target.value)}
+                                    
+                                     onChange={e => settrackNum(e.target.value)}
                                     placeholder="הכנס מספר מעקב" /><Form.Control.Feedback type="invalid">
                                     נא להכניס מספר מעקב תקין   
                                   </Form.Control.Feedback>
-                                <a href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} rel="noreferrer" target={"_blank"}>
-                                    <Button variant="outline-info" >  בדיקת סטטוס החבילה בדואר ישראל</Button>
+                                <a style={{display : showButton? 'hide' : 'none'}} href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} rel="noreferrer" target={"_blank"}>
+                                    <Button  variant="outline-info" >  בדיקת סטטוס החבילה בדואר ישראל</Button>
                                 </a>
                                 <br />
                             </Form.Group>
