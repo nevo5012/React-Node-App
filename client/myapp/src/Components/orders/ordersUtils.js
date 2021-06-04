@@ -8,7 +8,7 @@ export async function addNewOrder(order)
 }
 const getOrder =(id) =>
 {
-    return axios.get("http://localhost:8000/api/orders"+id)
+    return axios.get("http://localhost:8000/api/orders/"+id)
 }
 
 export default {addNewOrder,getOrder};

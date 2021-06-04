@@ -64,4 +64,20 @@ export function addOrder(data)
         })
     }
 
-     
+    export function getAOrder(id)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            order.findById(id, function(err,data)
+            {
+                if(err)
+                {
+                    reject(err)
+                }
+                else
+                {
+                    resolve(data)
+                }
+            })
+        })
+    }

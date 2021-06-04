@@ -21,26 +21,7 @@ function CartComp(props) {
         sessionStorage.setItem('memberid',JSON.stringify(props.memberid));
 
     }
-
-    // const updateCounter = () =>
-    // {
-    //     if(mailbox===false)
-    //     {
-
-
-
-
-    //         setMailbox(true)
-    //         setOrder({...order, pack_counter : props.packCont + 1})
-
-    //     }
-    // }
-    useEffect(() => {
-       
-        
-
-    }, [ ])
-
+  
     if (checkOut) {
         return (
             <div>
@@ -53,14 +34,11 @@ function CartComp(props) {
     return (
         <div>
             <div className="d-flex justify-content-end">
-
                 <Card style={{ width: '40rem' , margin : 'auto' }}>
                     <Card.Header  >{props.packCont} - פריטים להזמנה</Card.Header>
                     <ListGroup variant="flush">
                         {props.order.order_data.map((item, index) => {
-
                             return <ListGroup.Item action variant="light" key={index}>{item.shelf_number + " + " + item.tracking_number}
-                               
 
                             </ListGroup.Item>
                         })}

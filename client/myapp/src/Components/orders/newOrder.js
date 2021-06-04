@@ -16,6 +16,7 @@ function getDate(params) {
 function NewOrderComp(props) {
     const [packCont, setPackCont] = useState(0);
     const [id] = useState("607ff45bcaac553672743f5e");
+    sessionStorage.setItem('memberId', '607ff45bcaac553672743f5e');
     const [member, setMember] = useState({
         firstname: '',
         lastname: '',

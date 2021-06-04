@@ -2,7 +2,7 @@ import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup }
 import { useState, } from 'react';
 import { } from "react-router-dom";
 import ordersUtils from './ordersUtils';
-import OrderConfimComp from './orderConfirm';
+import OrderConfimComp from './order';
 import utils from './utils';
 
 function getSessionStorageOrDefault(key, defaultValue) {
@@ -92,7 +92,24 @@ function CheckOutComp(props) {
 
     if (confirm) {
         return (
-            <OrderConfimComp order={order} />
+            <div style={{ width: '40rem', margin: 'auto' }}>
+            <Card border="success">
+                <Card.Header>
+                   <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
+                  - פרטי הזמנה 
+                </Card.Header>
+                
+                <ListGroup variant="flush">
+
+                {order.order_data.map((item, index) => {
+                                    return <ListGroup.Item action variant="light" key={index}>
+                                        {item.shelf_number + " + " + item.tracking_number}
+                                        </ListGroup.Item>
+                                })}
+                                 {/* <ListGroup.Item style={{ display: props.mailbox ? 'none' : 'block' }} action variant="light"> {props.order.mailbox} - תא דואר  </ListGroup.Item> */}
+                </ListGroup>
+            </Card>
+        </div>
         )
     }
 
