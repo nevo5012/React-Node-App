@@ -1,6 +1,6 @@
 import { Button, Card, ListGroup,  } from 'react-bootstrap/'
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import CheckOutComp from './checkOut'
 
 
@@ -10,7 +10,6 @@ import CheckOutComp from './checkOut'
 function CartComp(props) {
     // const [mailbox, setMailbox] = useState(false)
     // const [packCounter, setCounter] = useState(props.packCont)
-       const [order, setOrder] = useState(props.order)
        const [checkOut, setCheckOut] = useState(false);
 
      
@@ -20,6 +19,9 @@ function CartComp(props) {
         sessionStorage.setItem('order', JSON.stringify(props.order));
         sessionStorage.setItem('memberid',JSON.stringify(props.memberid));
 
+    }
+    const packageInfo = (t) =>{
+        window.open("https://mypost.israelpost.co.il/lp?itemcode="+ t);
     }
   
     if (checkOut) {
@@ -38,10 +40,18 @@ function CartComp(props) {
                     <Card.Header  >{props.packCont} - פריטים להזמנה</Card.Header>
                     <ListGroup variant="flush">
                         {props.order.order_data.map((item, index) => {
-                            return <ListGroup.Item action variant="light" key={index}>{item.shelf_number + " + " + item.tracking_number}
-
+                            return <ListGroup.Item 
+                             
+                             action variant="light"
+                              key={index}>
+                             <a  href={"https://mypost.israelpost.co.il/lp?itemcode=" + item.tracking_number} rel="noreferrer" target={"_blank"}>
+                            <Button variant="outline-secondary">איתור פריט</Button>
+                            </a>
+                            {item.shelf_number + " + " + item.tracking_number}
+                          
                             </ListGroup.Item>
                         })}
+
                         {/* <ListGroup.Item action variant="light" style={{ display: order.mailbox ? 'block' : 'none' }} >{ "תא דואר : " + order.mailbox}</ListGroup.Item> */}
 
 

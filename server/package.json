@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon main"
+    "start": "main"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

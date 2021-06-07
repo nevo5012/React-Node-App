@@ -2,8 +2,7 @@ import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup }
 import { useState, } from 'react';
 import { } from "react-router-dom";
 import ordersUtils from './ordersUtils';
-import OrderConfimComp from './order';
-import utils from './utils';
+ import utils from './utils';
 
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
@@ -78,11 +77,9 @@ function CheckOutComp(props) {
         }
        
         let resp = await ordersUtils.addNewOrder(order)
-        console.log(resp.data._id)
-
-
           member.orders.push(resp.data._id)
-         let resp2 = await utils.updateMember(member,member._id)
+
+           await utils.updateMember(member,member._id)
           
         setConfirm(true)
 

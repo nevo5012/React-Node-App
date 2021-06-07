@@ -15,8 +15,8 @@ function getDate(params) {
 
 function NewOrderComp(props) {
     const [packCont, setPackCont] = useState(0);
-    const [id] = useState("607ff45bcaac553672743f5e");
-    sessionStorage.setItem('memberId', '607ff45bcaac553672743f5e');
+    const [id] = useState("60c0854f3829019701d5aff9");
+    sessionStorage.setItem('memberId', '60c0854f3829019701d5aff9');
     const [member, setMember] = useState({
         firstname: '',
         lastname: '',
@@ -40,9 +40,6 @@ function NewOrderComp(props) {
     const [orderId] = useState();
 
     const [validated, setValidated] = useState(false);
-
-    const [ showButton, setShowButton] = useState(false)
-
     const handleSubmit = (event) => {
         const form = event.currentTarget;
         var conditions = ["ח","ר","ג"];
@@ -59,26 +56,17 @@ function NewOrderComp(props) {
         else {
              let numOfPack = packCont
             event.preventDefault();
-            setShowButton(true)
             let obj = { shelf_number: shelfNum, tracking_number: trackNum };
-
             newOrder.order_data.push(obj);
-
             let currentDate = new Date();
             var dd = String(currentDate.getDate()).padStart(2, '0');
             var mm = String(currentDate.getMonth() + 1).padStart(2, '0');
             var yyyy = currentDate.getFullYear();
             currentDate = dd + '/' + mm + '/' + yyyy;
-
-            console.log(currentDate)
-
             setNewOrder({ ...newOrder, date: 123 })
-
-
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-
         }
         setValidated(true);
     };
@@ -99,12 +87,12 @@ function NewOrderComp(props) {
             console.log(member)
             utils.updateMember(member, id)
         }
-    }, [orderId])
+    },)
 
     return (
-        <div style={{ overflow: 'auto',   }}>
+        <div style={{ overflow: 'auto', marginTop : "100px"   }}>
             <div className="main">
-                <Card border="info" style={{ width: 'auto', margin: 'auto' }} >
+                <Card border="info" style={{ width: '40rem' , margin : 'auto' }} >
                     <Card.Header> <Card.Title>להזמנת משלוח אנא מלא את הפרטים</Card.Title>  </Card.Header>
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleSubmit}   >
@@ -114,9 +102,7 @@ function NewOrderComp(props) {
                                     type="text"
                                     maxlength="5"
                                     minLength="2"
-
                                     required
-                                    
                                     onChange={e => setShelfNum(e.target.value)}
                                     placeholder="הכנס מספר מדף (לדוגמא ג'124)" /><Form.Control.Feedback type="invalid">
                                     נא להכניס מספר מדף תקין 
@@ -127,12 +113,11 @@ function NewOrderComp(props) {
                                     maxlength="13"
                                     minLength="13"
                                     required
-                                    
                                      onChange={e => settrackNum(e.target.value)}
                                     placeholder="הכנס מספר מעקב" /><Form.Control.Feedback type="invalid">
                                     נא להכניס מספר מעקב תקין   
                                   </Form.Control.Feedback>
-                                <a style={{display : showButton? 'hide' : 'none'}} href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} rel="noreferrer" target={"_blank"}>
+                                <a   href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} rel="noreferrer" target={"_blank"}>
                                     <Button  variant="outline-info" >  בדיקת סטטוס החבילה בדואר ישראל</Button>
                                 </a>
                                 <br />

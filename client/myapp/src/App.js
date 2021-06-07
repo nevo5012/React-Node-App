@@ -1,11 +1,11 @@
-import MainPageComp from './Components/mainPage'
-import { BrowserRouter  } from 'react-router-dom';
+ import { BrowserRouter  } from 'react-router-dom';
+import MenuComp from './Components/menu.jsx';
 
 function App() {
   return (
     <div  >
       <BrowserRouter>
-      <MainPageComp/>
+      <MenuComp/>
       </BrowserRouter>
     </div>
   );

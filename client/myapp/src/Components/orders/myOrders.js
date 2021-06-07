@@ -1,9 +1,8 @@
-import { Button, Card, ListGroup,  } from 'react-bootstrap/'
-import { Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import CheckOutComp from './checkOut'
+ import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
 import OrderConfimComp from './order';
+import { Card } from "react-bootstrap";
+import OrderComp from "./order";
 
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
@@ -15,19 +14,19 @@ function getSessionStorageOrDefault(key, defaultValue) {
 
 
 function MyOrdersComp(props) {
-   const [orders, setOrders] = useState([])
+   const [orders] = useState([])
     const [member ] = useState( 
         getSessionStorageOrDefault('member',false)
     )
  
     useEffect(() => {
         getMemberOrders()
-    }, [orders])
+    }, )
      
     const getMemberOrders = () => 
     {
         let ordersId = member.orders
-        console.log(ordersId)
+        
       
 
         ordersId.forEach(element => {
@@ -38,22 +37,36 @@ function MyOrdersComp(props) {
     const getAllOrders = async (id) =>
     {
         let resp = await ordersUtils.getOrder(id)
-        console.log(resp.data)
-        orders.push(resp.data)
+         orders.push(resp.data)
+         
     }
+   
+    let ordersList = orders.map(o => {
+        return(
+            <OrderComp key={o._id} order={o}/>
+        )
+    })
  
+   
         return (
             <div>
-                <div className="d-flex justify-content-end">
-                        <Card.Header  > </Card.Header>
-                            {orders.map((item) => {
-                                return    <OrderConfimComp order={item}/>
-                            })}
-                </div>
+               <Card className="text-center">
+               <Card.Header>
+               <Card.Title>הזמנות האחרונות</Card.Title>
+                  </Card.Header>
+              <Card.Body>
 
+             
+                 <React.Fragment>
+                {ordersList}   
+
+             
+                </React.Fragment>
+                </Card.Body>
+                </Card>  
             </div>
         )
     }
  
-
+ 
 export default MyOrdersComp;
