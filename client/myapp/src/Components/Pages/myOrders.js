@@ -1,8 +1,11 @@
  import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
-import OrderConfimComp from './order';
 import { Card } from "react-bootstrap";
 import OrderComp from "./order";
+
+
+
+
 
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
@@ -13,22 +16,28 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 
+
+
+
 function MyOrdersComp(props) {
    const [orders] = useState([])
+    
     const [member ] = useState( 
         getSessionStorageOrDefault('member',false)
+        
     )
- 
-    useEffect(() => {
+  useEffect( () => {
+          
         getMemberOrders()
+
     }, )
+    
      
-    const getMemberOrders = () => 
+
+    const getMemberOrders=()=> 
     {
         let ordersId = member.orders
-        
-      
-
+       
         ordersId.forEach(element => {
             getAllOrders(element)
         });
@@ -37,19 +46,32 @@ function MyOrdersComp(props) {
     const getAllOrders = async (id) =>
     {
         let resp = await ordersUtils.getOrder(id)
-         orders.push(resp.data)
-         
+          orders.push(resp.data)
     }
    
-    let ordersList = orders.map(o => {
-        return(
-            <OrderComp key={o._id} order={o}/>
-        )
-    })
- 
-   
+    // let ordersList = orders.map(o => {
+    //     return(
+    //         <OrderComp key={o._id} order={o}/>
+    //     )
+    // })
+    const list =  orders
+       
+      const App = () => <List list={list} />;
+       
+      const List = ({ list }) => (
+        <ul>
+          {list.map(item => (
+            <OrderComp key={item._id} order={item} />
+          ))}
+        </ul>
+      );
+       
+     
+      
+      
         return (
-            <div>
+             <div>
+               
                <Card className="text-center">
                <Card.Header>
                <Card.Title>הזמנות האחרונות</Card.Title>
@@ -58,8 +80,8 @@ function MyOrdersComp(props) {
 
              
                  <React.Fragment>
-                {ordersList}   
-
+                  
+                 {App()} 
              
                 </React.Fragment>
                 </Card.Body>

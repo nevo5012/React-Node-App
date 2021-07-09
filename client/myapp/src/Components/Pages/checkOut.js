@@ -2,7 +2,7 @@ import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup }
 import { useState, } from 'react';
 import { } from "react-router-dom";
 import ordersUtils from './ordersUtils';
- import utils from './utils';
+import utils from './utils';
 
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
@@ -27,8 +27,8 @@ function getTotal(num, mail) {
 
 function CheckOutComp(props) {
 
-    const [member ] = useState( 
-        getSessionStorageOrDefault('member',false)
+    const [member] = useState(
+        getSessionStorageOrDefault('member', false)
     )
     const [order] = useState(
         getSessionStorageOrDefault('order', false)
@@ -75,38 +75,32 @@ function CheckOutComp(props) {
                 '_blank'
             );
         }
-       
         let resp = await ordersUtils.addNewOrder(order)
-          member.orders.push(resp.data._id)
-
-           await utils.updateMember(member,member._id)
-          
+        member.orders.push(resp.data._id)
+        await utils.updateMember(member, member._id)
         setConfirm(true)
-
-
     }
-
 
     if (confirm) {
         return (
             <div style={{ width: '40rem', margin: 'auto' }}>
-            <Card border="success">
-                <Card.Header>
-                   <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
-                  - פרטי הזמנה 
+                <Card border="success">
+                    <Card.Header>
+                        <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
+                  - פרטי הזמנה
                 </Card.Header>
-                
-                <ListGroup variant="flush">
 
-                {order.order_data.map((item, index) => {
-                                    return <ListGroup.Item action variant="light" key={index}>
-                                        {item.shelf_number + " + " + item.tracking_number}
-                                        </ListGroup.Item>
-                                })}
-                                 {/* <ListGroup.Item style={{ display: props.mailbox ? 'none' : 'block' }} action variant="light"> {props.order.mailbox} - תא דואר  </ListGroup.Item> */}
-                </ListGroup>
-            </Card>
-        </div>
+                    <ListGroup variant="flush">
+
+                        {order.order_data.map((item, index) => {
+                            return <ListGroup.Item action variant="light" key={index}>
+                                {item.shelf_number + " + " + item.tracking_number}
+                            </ListGroup.Item>
+                        })}
+                        {/* <ListGroup.Item style={{ display: props.mailbox ? 'none' : 'block' }} action variant="light"> {props.order.mailbox} - תא דואר  </ListGroup.Item> */}
+                    </ListGroup>
+                </Card>
+            </div>
         )
     }
 
@@ -116,56 +110,34 @@ function CheckOutComp(props) {
                 <Card border="info" style={{ width: 'auto', margin: 'auto' }}>
                     <Card.Header> <Card.Title>סיכום הזמנה</Card.Title>   </Card.Header>
                     <Card.Body>
-
                         <Card.Text >
                             <Card.Header>   {order.pack_counter} - מספר פריטים להזמנה </Card.Header>
                             <ListGroup variant="flush">
                                 {order.order_data.map((item, index) => {
-
                                     return <ListGroup.Item action variant="light" key={index}>{item.shelf_number + " + " + item.tracking_number}</ListGroup.Item>
-
                                 })}
                                 <ListGroup.Item style={{ display: order.mailbox ? 'block' : 'none' }} action variant="light"> {order.mailbox} - תא דואר  </ListGroup.Item>
-
-
                             </ListGroup>
                         </Card.Text>
-
-
-
-
-
                         <Card.Header size="lg"> סה"כ לתשלום - {total + " שקלים "}<br />
                             בחר את דרך התשלום המועדפת <br />
-
-
                             <ButtonGroup toggle>
-
                                 <ToggleButtonGroup type="radio" name="options" onChange={handleChange}   >
-
                                     <ToggleButton value={false}>payBox</ToggleButton>
                                     <ToggleButton value={true}>מזומן</ToggleButton>
                                 </ToggleButtonGroup>
                             </ButtonGroup>
-
                         </Card.Header>
-
-
-
                     </Card.Body>
                     <ButtonGroup style={{ display: value ? 'none' : 'block' }} >
-
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
-
                             paybox  שלח הזמנה ומעבר לתשלום ב
-
                         </Button>
-
                     </ButtonGroup>
                     <ButtonGroup style={{ display: value ? 'block' : 'none' }} >
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
                             שלח הזמנה
-                </Button>
+                        </Button>
                     </ButtonGroup>
 
                 </Card>
