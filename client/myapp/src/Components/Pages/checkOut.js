@@ -28,7 +28,7 @@ function getTotal(num, mail) {
 function CheckOutComp(props) {
 
     const [member] = useState(
-        getSessionStorageOrDefault('member', false)
+        getSessionStorageOrDefault('member', {})
     )
     const [order] = useState(
         getSessionStorageOrDefault('order', false)

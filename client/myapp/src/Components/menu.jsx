@@ -12,8 +12,7 @@ import Login from './login/Login';
 function MenuComp() {
   return <div  >
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>
-    
+      <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>    
       <Nav>
         <LinkContainer to="/neworder">
           <Nav.Link>הזמנת משלוח</Nav.Link>
