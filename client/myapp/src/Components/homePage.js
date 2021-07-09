@@ -2,14 +2,13 @@
 import { Link } from "react-router-dom";
 import { Button, Col, Container, Row } from "react-bootstrap";
 
-import '../Components/orders/App.css';
+import '../Components/Pages/App.css';
 
 
 
 function HomePageComp() {
 
-
-
+   
 
     return (
         <div  style={{marginTop : 100}} >
@@ -31,7 +30,7 @@ function HomePageComp() {
                   <Link to="/neworder" > <Button variant="outline-secondary">הרשמה למשלוח</Button></Link> 
                 </Row>
             </Container>
-            
+           
         </div>
 
     );

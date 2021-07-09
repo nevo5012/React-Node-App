@@ -3,17 +3,7 @@ import { Table } from 'react-bootstrap/'
 
 function OrderComp(props) {
 
-
-const list = ({orders}) =>(
-<ul>
-    {list.map(item=>(
-        <li key={item}>{item._id} </li>
-    ))}
-</ul>
-);
-
-
-
+  
 
 
     return (
@@ -61,7 +51,7 @@ const list = ({orders}) =>(
                 </tbody>
             </Table>
         </div>
-    )
-}
-
+     )
+    }
+ 
 export default OrderComp

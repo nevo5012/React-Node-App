@@ -6,11 +6,11 @@ import CartComp from './cart'
 
 function getDate(params) {
     let currentDate = new Date();
-            var dd = String(currentDate.getDate()).padStart(2, '0');
-            var mm = String(currentDate.getMonth() + 1).padStart(2, '0');
-            var yyyy = currentDate.getFullYear();
-            currentDate = dd + '/' + mm + '/' + yyyy;
-            return currentDate;
+    var dd = String(currentDate.getDate()).padStart(2, '0');
+    var mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+    var yyyy = currentDate.getFullYear();
+    currentDate = dd + '/' + mm + '/' + yyyy;
+    return currentDate;
 }
 
 function NewOrderComp(props) {
@@ -35,26 +35,22 @@ function NewOrderComp(props) {
         member_id: id,
         pack_counter: ''
     });
-    
+
 
     const [orderId] = useState();
 
     const [validated, setValidated] = useState(false);
     const handleSubmit = (event) => {
         const form = event.currentTarget;
-        var conditions = ["ח","ר","ג"];
-        if(!conditions.some(e=>shelfNum.includes(e)))
-          {
-              
-          }
-           if(form.checkValidity() === false ) {
+         
+        if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
-            }
-         
+        }
+
 
         else {
-             let numOfPack = packCont
+            let numOfPack = packCont
             event.preventDefault();
             let obj = { shelf_number: shelfNum, tracking_number: trackNum };
             newOrder.order_data.push(obj);
@@ -69,6 +65,7 @@ function NewOrderComp(props) {
             setPackCont(numOfPack);
         }
         setValidated(true);
+        event.target.reset();
     };
 
     useEffect(() => {
@@ -87,38 +84,40 @@ function NewOrderComp(props) {
             console.log(member)
             utils.updateMember(member, id)
         }
-    },)
+    })
 
     return (
-        <div style={{ overflow: 'auto', marginTop : "100px"   }}>
-            <div className="main">
-                <Card border="info" style={{ width: '40rem' , margin : 'auto' }} >
+        <div dir="rtl" >
+            <div style={{ overflow: 'auto', marginTop: "100px" }} >
+                <Card border="info" style={{ width: '40rem', margin: 'auto' }}  >
                     <Card.Header> <Card.Title>להזמנת משלוח אנא מלא את הפרטים</Card.Title>  </Card.Header>
-                    <Card.Body>
-                        <Form noValidate validated={validated} onSubmit={handleSubmit}   >
+                    <Card.Body >
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}    >
                             <Form.Group controlId="validationCustom01">
-                                <Form.Label>מספר מדף</Form.Label>
+                                <Form.Label   >מספר מדף</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    maxlength="5"
+                                    maxLength="5"
                                     minLength="2"
                                     required
                                     onChange={e => setShelfNum(e.target.value)}
                                     placeholder="הכנס מספר מדף (לדוגמא ג'124)" /><Form.Control.Feedback type="invalid">
-                                    נא להכניס מספר מדף תקין 
+                                     
                                   </Form.Control.Feedback>
                                 <Form.Label>מספר מעקב</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    maxlength="13"
+                                    maxLength="13"
                                     minLength="13"
                                     required
-                                     onChange={e => settrackNum(e.target.value)}
-                                    placeholder="הכנס מספר מעקב" /><Form.Control.Feedback type="invalid">
-                                    נא להכניס מספר מעקב תקין   
+                                    onChange={e => settrackNum(e.target.value)}
+                                    placeholder="הכנס מספר מעקב" />
+                                <Form.Control.Feedback type="invalid">
+                                    
                                   </Form.Control.Feedback>
-                                <a   href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} rel="noreferrer" target={"_blank"}>
-                                    <Button  variant="outline-info" >  בדיקת סטטוס החבילה בדואר ישראל</Button>
+                                <a href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} 
+                                rel="noreferrer" 
+                                target={"_blank"}>
                                 </a>
                                 <br />
                             </Form.Group>
@@ -127,7 +126,7 @@ function NewOrderComp(props) {
                     </Card.Body>
                 </Card>
             </div>
-            <div className="right">
+            <div  >
                 <CartComp order={newOrder} packCont={packCont} />
             </div>
         </div>
