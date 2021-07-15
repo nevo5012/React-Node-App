@@ -52,6 +52,8 @@ export function addMember(data)
                 city : data.city,
                 street : data.street,
                 house_number : data.house_number,
+                phone : data.phone,
+                email : data.email,
                 orders : data.orders
             })
             toAdd.save(function(err)
@@ -67,6 +69,24 @@ export function addMember(data)
             })
         })
 
+    }
+
+    export function getMemberByEmail(email)
+    {
+        return new Promise((resolve, reject) =>
+        {
+            member.find({email: email}, function(err, data)
+            {
+                if(err)
+                {
+                    reject(err)
+                }
+                else
+                {
+                    resolve(data)
+                }
+            })
+        })
     }
 
 export function updateMember(id, data)

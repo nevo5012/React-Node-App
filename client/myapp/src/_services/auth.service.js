@@ -1,29 +1,39 @@
 import { useState } from 'react';
 import axios from 'axios';
-import config from 'config';
+import config from './config';
 
 export const authService = {
-    login,
+    register,
+      login,
     logout
     //currentUser: currentUserSubject.asObservable(),
     //get currentUserValue () { return currentUserSubject.value }
 };
-
-function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    };
-
-    return axios.post(`${config.apiUrl}/users/authenticate`,JSON.stringify({ username, password }))
+async function login(credentials){
+    
+    let url = `http://localhost:8000/api/users/authenticate`
+    try {
+        let resp = await axios.post(url , credentials);
+        return resp.data
+      }
+      catch
+      {
+        return { email: '' }
+      }
+    }
+     
+function register(obj) {
+   
+    return axios.post(`http://localhost:8000/api/users/register`,obj)
     .then(res => {
-        console.log(res);
+         
+        return res.data
     })
 }
 
 function logout() {
-    // remove user from local storage to log user out
-    //localStorage.removeItem('currentUser');
-    //currentUserSubject.next(null);
+
+    sessionStorage.clear();
+    window.location.assign('/login');
+  
 }

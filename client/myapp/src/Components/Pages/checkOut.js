@@ -3,7 +3,7 @@ import { useState, } from 'react';
 import { } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import utils from './utils';
-
+import './App.css'
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
     if (!stored) {
@@ -83,8 +83,8 @@ function CheckOutComp(props) {
 
     if (confirm) {
         return (
-            <div style={{ width: '40rem', margin: 'auto' }}>
-                <Card border="success">
+            <div  dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
+                <Card style={{ width: '40rem', margin: 'auto' }}>
                     <Card.Header>
                         <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
                   - פרטי הזמנה
@@ -106,8 +106,8 @@ function CheckOutComp(props) {
 
     if (order) {
         return (
-            <div style={{ width: '30rem', margin: 'auto' }} >
-                <Card border="info" style={{ width: 'auto', margin: 'auto' }}>
+            <div  dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
+                <Card   className="Card">
                     <Card.Header> <Card.Title>סיכום הזמנה</Card.Title>   </Card.Header>
                     <Card.Body>
                         <Card.Text >
@@ -131,7 +131,7 @@ function CheckOutComp(props) {
                     </Card.Body>
                     <ButtonGroup style={{ display: value ? 'none' : 'block' }} >
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
-                            paybox  שלח הזמנה ומעבר לתשלום ב
+                            שלח הזמנה ומעבר לתשלום ב paybox 
                         </Button>
                     </ButtonGroup>
                     <ButtonGroup style={{ display: value ? 'block' : 'none' }} >

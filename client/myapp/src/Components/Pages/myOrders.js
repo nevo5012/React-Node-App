@@ -12,29 +12,33 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 function MyOrdersComp(props) {
-  const [orders] = useState([])
-
+  const [orders , setOrders] = useState([])
   const [member] = useState(
     getSessionStorageOrDefault('member', false)
-
   )
+
   useEffect(() => {
-
-    getMemberOrders()
-
+    if(!sessionStorage.member)
+        {
+            alert("על מנת להמשיך עליך להתחבר למערכת");
+            window.location.assign('/login');   
+        }
+    if (member) {
+      getMemberOrders();
+    }
   })
 
   const getMemberOrders = () => {
-    let ordersId = member.orders || []
+    let ordersId = member.orders;
 
     ordersId.forEach(element => {
-      getAllOrders(element)
+      getAllOrders(element);
     });
   }
 
   const getAllOrders = async (id) => {
-    let resp = await ordersUtils.getOrder(id)
-    orders.push(resp.data)
+    let resp = await ordersUtils.getOrder(id);
+    setOrders(resp.data.order_data);
   }
 
   // let ordersList = orders.map(o => {
@@ -42,7 +46,7 @@ function MyOrdersComp(props) {
   //         <OrderComp key={o._id} order={o}/>
   //     )
   // })
-  const list = orders
+  const list = orders || [];
 
   const App = () => <List list={list} />;
 
@@ -56,26 +60,40 @@ function MyOrdersComp(props) {
 
 
 
+   
+    return (
+      <div>
 
-  return (
-    <div>
+        <Card className="text-center">
+          <Card.Header>
+            <Card.Title>הזמנות האחרונות</Card.Title>
+          </Card.Header>
+          <Card.Body>
+            <React.Fragment>
+              {App()}
+            </React.Fragment>
+          </Card.Body>
+        </Card>
+      </div>
+    )
+   
+  // if(!orders.length) {
+  //   return (
+  //     <div>
+  //       <Card className="text-center">
+  //         <Card.Header>
+  //           <Card.Title>הזמנות האחרונות</Card.Title>
+  //         </Card.Header>
+  //         <Card.Body>
 
-      <Card className="text-center">
-        <Card.Header>
-          <Card.Title>הזמנות האחרונות</Card.Title>
-        </Card.Header>
-        <Card.Body>
+  //           פה יופיעו ההזמנות האחרונות שלך, לאחר שתזמין בפעם הראשונה.
+  //         </Card.Body>
+  //       </Card>
+  //     </div>
+  //   )
+  // }
 
 
-          <React.Fragment>
-
-            {App()}
-
-          </React.Fragment>
-        </Card.Body>
-      </Card>
-    </div>
-  )
 }
 
 

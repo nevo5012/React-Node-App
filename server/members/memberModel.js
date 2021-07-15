@@ -7,12 +7,13 @@ let appSchema = mongoose.Schema;
 
 let memberSchema = new appSchema(
     {
-        firstname : String,
-        lastname : String,
+        first_name : String,
+        last_name : String,
         city : String,
         street : String ,
-        housenumber : String,
-        phone : Number,
+        house_number : String,
+        phone : String,
+        email : String,
         orders : [  String ]
     }
 )

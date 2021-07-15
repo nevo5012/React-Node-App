@@ -3,7 +3,7 @@
 import {Router} from 'express';
 
 
-import {deleteMember, getAllMembers, getAMember , addMember, updateMember} from './membersUtils.js'
+import {deleteMember, getAllMembers, getAMember , addMember, updateMember, getMemberByEmail} from './membersUtils.js'
 // link to Router function
 const appRoute = Router();
 
@@ -20,7 +20,16 @@ appRoute.route('/:id').get(async function(req, resp)
     let member = await getAMember(id);
     return resp.json(member)
 })
-
+//Get a member by ID / Email
+appRoute.route('/members/:id').get(async function(req,resp)
+{
+    if(!req.params.id.includes('undefined'))
+    {
+        let member = await getMemberByEmail(req.params.id)
+        return resp.json(member)
+    }
+    console.log('failed to get member by email');
+})
 
 // POST (add a member)
 appRoute.route('/').post(async function(req,resp)
