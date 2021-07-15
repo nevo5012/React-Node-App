@@ -12,33 +12,30 @@ function getDate(params) {
     currentDate = dd + '/' + mm + '/' + yyyy;
     return currentDate;
 }
-
+function getSessionStorageOrDefault(key, defaultValue) {
+    const stored = sessionStorage.getItem(key);
+    if (!stored) {
+      return defaultValue;
+    }
+    return JSON.parse(stored);
+  }
 function NewOrderComp(props) {
     const [packCont, setPackCont] = useState(0);
-    const [id] = useState("60c0854f3829019701d5aff9");
-    sessionStorage.setItem('memberId', '60c0854f3829019701d5aff9');
-    const [member, setMember] = useState({
-        firstname: '',
-        lastname: '',
-        city: '',
-        street: '',
-        housenumber: '',
-        phonenumber: '',
-        orders: ['']
-    });
+   const [member] = useState(
+    getSessionStorageOrDefault('member', false)
+  )
+   
     const [shelfNum, setShelfNum] = useState('');
     const [trackNum, settrackNum] = useState('')
     const [newOrder, setNewOrder] = useState({
         date: getDate(),
         order_data: [],
         mailbox: '',
-        member_id: id,
+        member_id: member.member_id,
         pack_counter: ''
     });
 
-
     const [orderId] = useState();
-
     const [validated, setValidated] = useState(false);
     const handleSubmit = (event) => {
         const form = event.currentTarget;
@@ -47,8 +44,6 @@ function NewOrderComp(props) {
             event.preventDefault();
             event.stopPropagation();
         }
-
-
         else {
             let numOfPack = packCont
             event.preventDefault();
@@ -69,33 +64,28 @@ function NewOrderComp(props) {
     };
 
     useEffect(() => {
-        getOneMember()
-    });
-
-    async function getOneMember() {
-        let resp = await utils.getMember(id)
-        setMember(resp.data)
-        sessionStorage.setItem('member', JSON.stringify(resp.data));
-    }
-
-    useEffect(() => {
+        if(!sessionStorage.member)
+        {
+            console.log("yes")
+            alert("על מנת להזמין משלוח עליך להתחבר למערכת")
+            window.location.assign('/login')   
+        }
         if (orderId) {
             member.orders.push(orderId)
             console.log(member)
-            utils.updateMember(member, id)
+            utils.updateMember(member, member.member_id)
         }
     })
 
     return (
-        <div dir="rtl" >
+        <div dir="rtl" className="text-center" >
             <div style={{ overflow: 'auto', marginTop: "100px" }} >
-                <Card border="info" style={{ width: '40rem', margin: 'auto' }}  >
+                <Card className="Card" >
                     <Card.Header> <Card.Title>להזמנת משלוח אנא מלא את הפרטים</Card.Title>  </Card.Header>
                     <Card.Body >
                         <Form noValidate validated={validated} onSubmit={handleSubmit}    >
                             <Form.Group controlId="validationCustom01">
-                                <Form.Label   >מספר מדף</Form.Label>
-                                <Form.Control
+                                 <Form.Control
                                     type="text"
                                     maxLength="5"
                                     minLength="2"
@@ -104,8 +94,7 @@ function NewOrderComp(props) {
                                     placeholder="הכנס מספר מדף (לדוגמא ג'124)" /><Form.Control.Feedback type="invalid">
                                      
                                   </Form.Control.Feedback>
-                                <Form.Label>מספר מעקב</Form.Label>
-                                <Form.Control
+                                 <Form.Control
                                     type="text"
                                     maxLength="13"
                                     minLength="13"
@@ -121,7 +110,7 @@ function NewOrderComp(props) {
                                 </a>
                                 <br />
                             </Form.Group>
-                            <Button type="submit" >הוסף פריט</Button><br /><br />
+                            <Button type="submit" > הוסף פריט למשלוח</Button><br /><br />
                         </Form >
                     </Card.Body>
                 </Card>

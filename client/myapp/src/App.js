@@ -3,7 +3,7 @@ import MenuComp from './Components/menu.jsx';
 
 function App() {
   return (
-    <div dir="rtl" >
+    <div dir="rtl"  >
       <BrowserRouter>
       <MenuComp/>
       </BrowserRouter>
