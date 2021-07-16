@@ -1,6 +1,5 @@
 import { Table } from 'react-bootstrap/'
-import { useEffect } from 'react'
-
+ 
 function OrderComp(props) {
 
   

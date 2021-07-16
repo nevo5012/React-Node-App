@@ -46,6 +46,13 @@ export function addOrder(data)
 
     }
 
+    export function getByMemberId(id)
+    {
+        console.log("member : " + id)
+        return order.find({member_id : id})
+        
+    }
+
     export function getOrdersByMember(member_id)
     {
         return new Promise((resolve, reject) =>

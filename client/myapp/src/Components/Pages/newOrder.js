@@ -19,6 +19,7 @@ function getSessionStorageOrDefault(key, defaultValue) {
     }
     return JSON.parse(stored);
   }
+ 
 function NewOrderComp(props) {
     const [packCont, setPackCont] = useState(0);
    const [member] = useState(
@@ -31,10 +32,10 @@ function NewOrderComp(props) {
         date: getDate(),
         order_data: [],
         mailbox: '',
-        member_id: member.member_id,
+        member_id : member._id,
         pack_counter: ''
     });
-
+    console.log(newOrder.member_id)
     const [orderId] = useState();
     const [validated, setValidated] = useState(false);
     const handleSubmit = (event) => {
@@ -58,7 +59,7 @@ function NewOrderComp(props) {
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-        }
+         }
         setValidated(true);
         event.target.reset();
     };
@@ -69,11 +70,6 @@ function NewOrderComp(props) {
             console.log("yes")
             alert("על מנת להזמין משלוח עליך להתחבר למערכת")
             window.location.assign('/login')   
-        }
-        if (orderId) {
-            member.orders.push(orderId)
-            console.log(member)
-            utils.updateMember(member, member.member_id)
         }
     })
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
 import { Card } from "react-bootstrap";
 import OrderComp from "./order";
+import utils from "./utils";
 
 function getSessionStorageOrDefault(key, defaultValue) {
   const stored = sessionStorage.getItem(key);
@@ -26,33 +27,43 @@ function MyOrdersComp(props) {
     if (member) {
       getMemberOrders();
     }
-  })
+  },[])
 
-  const getMemberOrders = () => {
-    let ordersId = member.orders;
 
-    ordersId.forEach(element => {
-      getAllOrders(element);
-    });
+  const getMemberOrders = async() =>{
+    let resp1 = await utils.getMember(member._id)
+    console.log("member :"+ resp1.data)
+    let memberId = member._id
+    let resp = await ordersUtils.getByMemberId({memberId});
+
+    console.log( "result : "+ resp.data.orderResult)
+    setOrders(resp.data.orderResult)
   }
 
-  const getAllOrders = async (id) => {
-    let resp = await ordersUtils.getOrder(id);
-    setOrders(resp.data.order_data);
-  }
+  // const getMemberOrders = () => {
+  //   let ordersId = member.orders;
+
+  //   ordersId.forEach(element => {
+  //     getAllOrders(element);
+  //   });
+  // }
+
+  // const getAllOrders = async (id) => {
+  //   let resp = await ordersUtils.getOrder(id);
+  //   setOrders(resp.data.order_data);
+  // }
 
   // let ordersList = orders.map(o => {
   //     return(
   //         <OrderComp key={o._id} order={o}/>
   //     )
   // })
-  const list = orders || [];
-
-  const App = () => <List list={list} />;
+ 
+  const App = () => <List list={orders} />;
 
   const List = ({ list }) => (
     <ul>
-      {list.map(item => (
+      {orders.map(item => (
         <OrderComp key={item._id} order={item} />
       ))}
     </ul>
@@ -60,10 +71,10 @@ function MyOrdersComp(props) {
 
 
 
-   
+    if(orders)
+    {
     return (
       <div>
-
         <Card className="text-center">
           <Card.Header>
             <Card.Title>הזמנות האחרונות</Card.Title>
@@ -76,22 +87,22 @@ function MyOrdersComp(props) {
         </Card>
       </div>
     )
-   
-  // if(!orders.length) {
-  //   return (
-  //     <div>
-  //       <Card className="text-center">
-  //         <Card.Header>
-  //           <Card.Title>הזמנות האחרונות</Card.Title>
-  //         </Card.Header>
-  //         <Card.Body>
+  }
+  if(!orders) {
+    return (
+      <div>
+        <Card className="text-center">
+          <Card.Header>
+            <Card.Title>הזמנות האחרונות</Card.Title>
+          </Card.Header>
+          <Card.Body>
 
-  //           פה יופיעו ההזמנות האחרונות שלך, לאחר שתזמין בפעם הראשונה.
-  //         </Card.Body>
-  //       </Card>
-  //     </div>
-  //   )
-  // }
+            פה יופיעו ההזמנות האחרונות שלך, לאחר שתזמין בפעם הראשונה.
+          </Card.Body>
+        </Card>
+      </div>
+    )
+  }
 
 
 }

@@ -1,6 +1,6 @@
 import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup } from 'react-bootstrap/'
 import { useState, } from 'react';
-import { } from "react-router-dom";
+import {Link } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import utils from './utils';
 import './App.css'
@@ -98,6 +98,7 @@ function CheckOutComp(props) {
                             </ListGroup.Item>
                         })}
                         {/* <ListGroup.Item style={{ display: props.mailbox ? 'none' : 'block' }} action variant="light"> {props.order.mailbox} - תא דואר  </ListGroup.Item> */}
+                       <Link to="/myorders" > <Button>חזרה למשלוחים שלי </Button></Link>
                     </ListGroup>
                 </Card>
             </div>

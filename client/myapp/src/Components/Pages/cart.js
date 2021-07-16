@@ -15,7 +15,7 @@ function CartComp(props) {
      
      const sendForm = () => {
         setCheckOut(true)
-
+        console.log(props.order)
         sessionStorage.setItem('order', JSON.stringify(props.order));
         sessionStorage.setItem('memberid',JSON.stringify(props.memberid));
 
