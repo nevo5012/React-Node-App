@@ -1,6 +1,6 @@
 import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup } from 'react-bootstrap/'
 import { useState, } from 'react';
-import { } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import utils from './utils';
 import './App.css'
@@ -37,33 +37,7 @@ function CheckOutComp(props) {
         getTotal(order.pack_counter, order.mailbox)
     )
     const [value, setValue] = useState(false)
-
     const [confirm, setConfirm] = useState(false)
-    // useEffect(() => {
-
-    //     setPackCounter(props.order.order_data.length)
-
-    //     if (props.order.mailbox.length > 1) {
-    //         setMailbox(true);
-    //         let x = props.order.order_data.length + 1
-
-    //         setPackCounter(x);
-    //     }
-    //    priceCalc()
-    // }, [])
-
-    // const priceCalc = () => {
-    //     if (props.order.order_data.length > 1) {
-    //         setPrice(5)
-    //     }
-    //     let x = props.order.order_data.length * price
-    //     if (mailbox) {
-    //         x = x + 5
-    //     }
-    //     setTotal(x)
-
-    // }
-
     const handleChange = (val) => setValue(val);
 
     const sendOrder = async () => {
@@ -83,12 +57,12 @@ function CheckOutComp(props) {
 
     if (confirm) {
         return (
-            <div  dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
+            <div dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
                 <Card style={{ width: '40rem', margin: 'auto' }}>
                     <Card.Header>
                         <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
-                  - פרטי הזמנה
-                </Card.Header>
+                        - פרטי הזמנה
+                    </Card.Header>
 
                     <ListGroup variant="flush">
 
@@ -97,7 +71,7 @@ function CheckOutComp(props) {
                                 {item.shelf_number + " + " + item.tracking_number}
                             </ListGroup.Item>
                         })}
-                        {/* <ListGroup.Item style={{ display: props.mailbox ? 'none' : 'block' }} action variant="light"> {props.order.mailbox} - תא דואר  </ListGroup.Item> */}
+                        <Link to="/myorders" > <Button>חזרה למשלוחים שלי </Button></Link>
                     </ListGroup>
                 </Card>
             </div>
@@ -106,23 +80,31 @@ function CheckOutComp(props) {
 
     if (order) {
         return (
-            <div  dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
-                <Card   className="Card">
+            <div dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
+                <Card className="Card">
                     <Card.Header> <Card.Title>סיכום הזמנה</Card.Title>   </Card.Header>
                     <Card.Body>
                         <Card.Text >
                             <Card.Header>   {order.pack_counter} - מספר פריטים להזמנה </Card.Header>
                             <ListGroup variant="flush">
                                 {order.order_data.map((item, index) => {
-                                    return <ListGroup.Item action variant="light" key={index}>{item.shelf_number + " + " + item.tracking_number}</ListGroup.Item>
+                                    return <ListGroup.Item
+                                        action variant="light"
+                                        key={index}>
+                                        {item.shelf_number + " + " + item.tracking_number}
+                                    </ListGroup.Item>
                                 })}
-                                <ListGroup.Item style={{ display: order.mailbox ? 'block' : 'none' }} action variant="light"> {order.mailbox} - תא דואר  </ListGroup.Item>
+                                <ListGroup.Item
+                                    style={{ display: order.mailbox ? 'block' : 'none' }}
+                                    action variant="light">
+                                    {order.mailbox} - תא דואר
+                                </ListGroup.Item>
                             </ListGroup>
                         </Card.Text>
                         <Card.Header size="lg"> סה"כ לתשלום - {total + " שקלים "}<br />
                             בחר את דרך התשלום המועדפת <br />
                             <ButtonGroup toggle>
-                                <ToggleButtonGroup type="radio" name="options" onChange={handleChange}   >
+                                <ToggleButtonGroup type="radio" name="options" onChange={handleChange}>
                                     <ToggleButton value={false}>payBox</ToggleButton>
                                     <ToggleButton value={true}>מזומן</ToggleButton>
                                 </ToggleButtonGroup>
@@ -131,7 +113,7 @@ function CheckOutComp(props) {
                     </Card.Body>
                     <ButtonGroup style={{ display: value ? 'none' : 'block' }} >
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
-                            שלח הזמנה ומעבר לתשלום ב paybox 
+                            שלח הזמנה ומעבר לתשלום ב paybox
                         </Button>
                     </ButtonGroup>
                     <ButtonGroup style={{ display: value ? 'block' : 'none' }} >
@@ -139,9 +121,7 @@ function CheckOutComp(props) {
                             שלח הזמנה
                         </Button>
                     </ButtonGroup>
-
                 </Card>
-
             </div>
         );
     }

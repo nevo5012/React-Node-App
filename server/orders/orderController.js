@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getAllOrders, addOrder,getOrdersByMember, getAOrder } from './ordersUtils.js'
+import { getAllOrders, addOrder, getAOrder, getByMemberId } from './ordersUtils.js'
 
 
 const appRoute = Router()
@@ -18,7 +18,25 @@ appRoute.route('/').post(async function(req,resp)
     console.log(`${JSON.stringify(newOrder)}`);
     let result = await addOrder(newOrder)
     return resp.json(result)
-})
+});
+
+appRoute.route('/memberid')
+    .post(async function(req,resp)
+    {
+        let id = req.body.memberId
+        console.log(id)
+       let orderResult = await getByMemberId(id);
+        if(orderResult.length)
+       {
+               return resp.send({
+                   orderResult
+           })
+       }
+       else{
+           return resp.send({});
+       }
+    })
+
 
 appRoute.route('/orders/:id').get(async function(req,resp)
 {
@@ -29,6 +47,7 @@ appRoute.route('/orders/:id').get(async function(req,resp)
     }
     console.log('failed to get orders by member id');
 })
+
 appRoute.route('/:id').get(async function(req, resp)
 {
     let id = req.params.id;

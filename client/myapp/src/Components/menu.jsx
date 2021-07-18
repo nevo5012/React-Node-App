@@ -23,10 +23,6 @@ function getSessionStorageOrDefault(key, defaultValue) {
 function MenuComp() {
   const [session] = useState( getSessionStorageOrDefault('member', false));
 
-
-
-
-
   return <div  >
 
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -40,9 +36,7 @@ function MenuComp() {
       /> 
       
       </Navbar.Brand>
-    
       <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>    
-      
       <Nav>
         <LinkContainer to="/neworder">
           <Nav.Link>הזמנת משלוח</Nav.Link>
@@ -62,11 +56,6 @@ function MenuComp() {
       </Navbar.Collapse>
     </Navbar>
 
-
-
-
-
-
     <Switch>
       <Route path='/myorders' component={MyOrdersComp} />
       <Route exact path='/' component={HomePageComp} />
@@ -77,7 +66,6 @@ function MenuComp() {
       <Route path='/OrderConfim' component={OrderConfimComp} />
       <Route path='/login' component={LoginComp} />
     </Switch>
-
   </div>;
 }
 

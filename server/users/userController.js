@@ -1,5 +1,5 @@
 
-import e, { Router } from 'express';
+import  { Router } from 'express';
 import { getMemberByEmail } from '../members/membersUtils.js';
 import { addUser, getUser, findEmail } from './userUtils.js';
 
@@ -8,17 +8,12 @@ const appRoute = Router();
 
 appRoute.route('/authenticate')
     .post(async function (req, resp) {
-        console.log(req.body)
         let email = req.body.email;
         let password = req.body.password;
         let userResult = await getUser(email, password);
-
-
         if (userResult.length) {
-            console.log("user : " + userResult);
-             getMemberByEmail(email)
+            getMemberByEmail(email)
                 .then(member => {
-                    console.log("member : "+ member)
                     return resp.send({
                         'email': member[0].email,
                         'member': member[0]
@@ -28,7 +23,6 @@ appRoute.route('/authenticate')
         else {
             return resp.send({ 'data': 'username or password are not valid' });
         }
-
     })
 
 appRoute.route('/register').post(async function (req, resp) {

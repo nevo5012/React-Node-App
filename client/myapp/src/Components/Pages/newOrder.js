@@ -1,45 +1,49 @@
 import { Form, Button, Card, } from 'react-bootstrap/'
 import { useState, useEffect } from 'react';
-import utils from './utils';
 import './App.css'
-import CartComp from './cart'
+import OrderComp from './order';
+import { Link } from 'react-router-dom';
+import CheckOutComp from './checkOut';
 
 function getDate(params) {
     let currentDate = new Date();
     var dd = String(currentDate.getDate()).padStart(2, '0');
     var mm = String(currentDate.getMonth() + 1).padStart(2, '0');
     var yyyy = currentDate.getFullYear();
-    currentDate = dd + '/' + mm + '/' + yyyy;
+    var hh = currentDate.getHours();
+    var min = currentDate.getMinutes();
+    currentDate = hh + ":" + min + " " + dd + '/' + mm + '/' + yyyy;
     return currentDate;
 }
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
     if (!stored) {
-      return defaultValue;
+        return defaultValue;
     }
     return JSON.parse(stored);
-  }
+}
+
 function NewOrderComp(props) {
     const [packCont, setPackCont] = useState(0);
-   const [member] = useState(
-    getSessionStorageOrDefault('member', false)
-  )
-   
+    const [member] = useState(
+        getSessionStorageOrDefault('member', false)
+    )
+
     const [shelfNum, setShelfNum] = useState('');
     const [trackNum, settrackNum] = useState('')
     const [newOrder, setNewOrder] = useState({
         date: getDate(),
         order_data: [],
         mailbox: '',
-        member_id: member.member_id,
+        member_id: member._id,
         pack_counter: ''
     });
-
-    const [orderId] = useState();
     const [validated, setValidated] = useState(false);
+    const [checkOut, setCheckOut] = useState(false)
+
     const handleSubmit = (event) => {
         const form = event.currentTarget;
-         
+
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
@@ -63,19 +67,27 @@ function NewOrderComp(props) {
         event.target.reset();
     };
 
+    const sendForm = () => {
+        setCheckOut(true)
+        console.log(props.order)
+        sessionStorage.setItem('order', JSON.stringify(newOrder));
+        sessionStorage.setItem('memberid', JSON.stringify(newOrder.member_id));
+    }
+
     useEffect(() => {
-        if(!sessionStorage.member)
-        {
+        if (!sessionStorage.member) {
             console.log("yes")
             alert("על מנת להזמין משלוח עליך להתחבר למערכת")
-            window.location.assign('/login')   
-        }
-        if (orderId) {
-            member.orders.push(orderId)
-            console.log(member)
-            utils.updateMember(member, member.member_id)
+            props.history.push("/login")
         }
     })
+    if (checkOut) {
+        return (
+            <div>
+                <CheckOutComp order={newOrder} />
+            </div>
+        )
+    };
 
     return (
         <div dir="rtl" className="text-center" >
@@ -85,16 +97,17 @@ function NewOrderComp(props) {
                     <Card.Body >
                         <Form noValidate validated={validated} onSubmit={handleSubmit}    >
                             <Form.Group controlId="validationCustom01">
-                                 <Form.Control
+                                <Form.Control
                                     type="text"
                                     maxLength="5"
                                     minLength="2"
                                     required
                                     onChange={e => setShelfNum(e.target.value)}
-                                    placeholder="הכנס מספר מדף (לדוגמא ג'124)" /><Form.Control.Feedback type="invalid">
-                                     
-                                  </Form.Control.Feedback>
-                                 <Form.Control
+                                    placeholder="הכנס מספר מדף (לדוגמא ג124)" />
+                                <Form.Control.Feedback type="invalid">
+                                    אנא הקלד מספר מדף תקין
+                                </Form.Control.Feedback>
+                                <Form.Control
                                     type="text"
                                     maxLength="13"
                                     minLength="13"
@@ -102,11 +115,11 @@ function NewOrderComp(props) {
                                     onChange={e => settrackNum(e.target.value)}
                                     placeholder="הכנס מספר מעקב" />
                                 <Form.Control.Feedback type="invalid">
-                                    
-                                  </Form.Control.Feedback>
-                                <a href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum} 
-                                rel="noreferrer" 
-                                target={"_blank"}>
+                                    אנא הכנס מספר מעקב תקין.
+                                </Form.Control.Feedback>
+                                <a href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum}
+                                    rel="noreferrer"
+                                    target={"_blank"}>
                                 </a>
                                 <br />
                             </Form.Group>
@@ -115,10 +128,15 @@ function NewOrderComp(props) {
                     </Card.Body>
                 </Card>
             </div>
-            <div  >
-                <CartComp order={newOrder} packCont={packCont} />
+            <div style={{ display: packCont ? 'block' : 'none' }}  >
+                <Card className="Card">
+                    <Card.Header> <Card.Title> פריטים להזמנה - {packCont}</Card.Title> </Card.Header>
+                    <OrderComp order={newOrder} packCont={1} />
+                    <Link to="/checkout" > <Button variant="success" onClick={sendForm} > המשך לסיום הזמנה</Button>  </Link>
+                </Card>
             </div>
         </div>
     )
 }
+
 export default NewOrderComp;

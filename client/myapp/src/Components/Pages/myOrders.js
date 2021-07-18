@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
 import { Card } from "react-bootstrap";
 import OrderComp from "./order";
-
+  
 function getSessionStorageOrDefault(key, defaultValue) {
   const stored = sessionStorage.getItem(key);
   if (!stored) {
@@ -12,7 +12,7 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 function MyOrdersComp(props) {
-  const [orders , setOrders] = useState([])
+  const [orders , setOrders] = useState()
   const [member] = useState(
     getSessionStorageOrDefault('member', false)
   )
@@ -21,35 +21,30 @@ function MyOrdersComp(props) {
     if(!sessionStorage.member)
         {
             alert("על מנת להמשיך עליך להתחבר למערכת");
-            window.location.assign('/login');   
+             props.history.push("/login")
         }
     if (member) {
       getMemberOrders();
     }
-  })
+  },[])
 
-  const getMemberOrders = () => {
-    let ordersId = member.orders;
 
-    ordersId.forEach(element => {
-      getAllOrders(element);
-    });
+  const getMemberOrders = () =>{
+
+    let memberId = member._id;
+     ordersUtils.getByMemberId({memberId}).then(resp=> {
+       let orders = resp.data.orderResult;
+       if(orders)
+       {
+         setOrders(orders.reverse());
+       }
+      });
+
+    // let orders = resp.data.orderResult;
+   
   }
-
-  const getAllOrders = async (id) => {
-    let resp = await ordersUtils.getOrder(id);
-    setOrders(resp.data.order_data);
-  }
-
-  // let ordersList = orders.map(o => {
-  //     return(
-  //         <OrderComp key={o._id} order={o}/>
-  //     )
-  // })
-  const list = orders || [];
-
-  const App = () => <List list={list} />;
-
+ 
+  const App = () => <List list={orders} />;
   const List = ({ list }) => (
     <ul>
       {list.map(item => (
@@ -60,10 +55,10 @@ function MyOrdersComp(props) {
 
 
 
-   
+    if(orders)
+    {
     return (
       <div>
-
         <Card className="text-center">
           <Card.Header>
             <Card.Title>הזמנות האחרונות</Card.Title>
@@ -76,22 +71,22 @@ function MyOrdersComp(props) {
         </Card>
       </div>
     )
-   
-  // if(!orders.length) {
-  //   return (
-  //     <div>
-  //       <Card className="text-center">
-  //         <Card.Header>
-  //           <Card.Title>הזמנות האחרונות</Card.Title>
-  //         </Card.Header>
-  //         <Card.Body>
+  }
+  if(!orders) {
+    return (
+      <div>
+        <Card className="text-center">
+          <Card.Header>
+            <Card.Title>הזמנות האחרונות</Card.Title>
+          </Card.Header>
+          <Card.Body>
 
-  //           פה יופיעו ההזמנות האחרונות שלך, לאחר שתזמין בפעם הראשונה.
-  //         </Card.Body>
-  //       </Card>
-  //     </div>
-  //   )
-  // }
+            פה יופיעו ההזמנות האחרונות שלך, לאחר שתזמין בפעם הראשונה.
+          </Card.Body>
+        </Card>
+      </div>
+    )
+  }
 
 
 }
