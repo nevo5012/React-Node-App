@@ -47,7 +47,7 @@ function MyOrdersComp(props) {
   const App = () => <List list={orders} />;
   const List = ({ list }) => (
     <ul>
-      {list.map(item => (
+      {orders.map(item => (
         <OrderComp key={item._id} order={item} />
       ))}
     </ul>

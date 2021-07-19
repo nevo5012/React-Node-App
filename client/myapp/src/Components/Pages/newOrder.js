@@ -62,7 +62,7 @@ function NewOrderComp(props) {
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-        }
+         }
         setValidated(true);
         event.target.reset();
     };
