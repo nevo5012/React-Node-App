@@ -54,7 +54,6 @@ export function addMember(data)
                 house_number : data.house_number,
                 phone : data.phone,
                 email : data.email,
-                orders : data.orders
             })
             toAdd.save(function(err)
             {

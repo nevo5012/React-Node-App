@@ -1,4 +1,4 @@
-import { Navbar, Nav, Button } from 'react-bootstrap/';
+import { Navbar, Nav, Button, Container, NavDropdown, Row, Col } from 'react-bootstrap/';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Route, Link } from "react-router-dom";
@@ -21,51 +21,65 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 function MenuComp() {
-  const [session] = useState( getSessionStorageOrDefault('member', false));
+  const [session] = useState(getSessionStorageOrDefault('member', false));
 
-  return <div  >
+  return <div>
 
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand href="/">
-      <img
-        src={logo}
-        width="35"
-        height="35"
-        className="d-inline-block align-top"
-        alt="Logo"
-      /> 
-      
-      </Navbar.Brand>
-      <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>    
-      <Nav>
-        <LinkContainer to="/neworder">
-          <Nav.Link>הזמנת משלוח</Nav.Link>
-        </LinkContainer>
-        <LinkContainer to="/myorders">
-          <Nav.Link>המשלוחים שלי</Nav.Link>
-        </LinkContainer>
-      </Nav>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+    <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Container>
+        <Navbar.Brand href="/">
+          <img
+            src={logo}
+            width="35"
+            height="35"
+            className="d-inline-block align-top"
+            alt="Logo"
+          />
+        </Navbar.Brand>
+        <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse     id="responsive-navbar-nav">
+          <Nav  className="me-auto">
+            <LinkContainer style={{display : session? 'block' : 'none' }} to="/neworder">
+              <Nav.Link>הזמנת משלוח</Nav.Link>
+            </LinkContainer>
+            <LinkContainer style={{display : session? 'block' : 'none' }} to="/myorders">
+              <Nav.Link>המשלוחים שלי</Nav.Link>
+            </LinkContainer>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto" style={{ display: session ? 'none' : 'block' }}>
           <Link to="/login"> <Button >התחברות</Button></Link>
         </Nav>
-        <Nav className="mr-auto" style={{ display: session ? 'block' : 'none' }}>
-         <Button onClick={authService.logout} >התנתק</Button>
+        <Nav className="me-auto" style={{ display: session ? 'block' : 'none' }}>
+          <Button onClick={authService.logout} >התנתק</Button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
 
-    <Switch>
+
+  <Container>
+    <Row>
+      <Col >
+      <Switch>
       <Route path='/myorders' component={MyOrdersComp} />
       <Route exact path='/' component={HomePageComp} />
       <Route path='/home' component={HomePageComp} />
       <Route path='/checkout/:id' component={CheckOutComp} />
+      <Route path='/checkout' component={CheckOutComp} />
+
+
       <Route path='/neworder' component={newOrderComp} />
       <Route path='/checkout' component={CheckOutComp} />
       <Route path='/OrderConfim' component={OrderConfimComp} />
       <Route path='/login' component={LoginComp} />
     </Switch>
+      </Col>
+    </Row>
+  </Container>
+    
   </div>;
 }
 
