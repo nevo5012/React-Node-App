@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
-import { Card } from "react-bootstrap";
+import { Card, Navbar, Table } from "react-bootstrap";
 import OrderComp from "./order";
-  
+
 function getSessionStorageOrDefault(key, defaultValue) {
   const stored = sessionStorage.getItem(key);
   if (!stored) {
@@ -12,38 +12,36 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 function MyOrdersComp(props) {
-  const [orders , setOrders] = useState()
+  const [orders, setOrders] = useState()
   const [member] = useState(
     getSessionStorageOrDefault('member', false)
   )
 
   useEffect(() => {
-    if(!sessionStorage.member)
-        {
-            alert("על מנת להמשיך עליך להתחבר למערכת");
-             props.history.push("/login")
-        }
+    if (!sessionStorage.member) {
+      alert("על מנת להמשיך עליך להתחבר למערכת");
+      props.history.push("/login")
+    }
     if (member) {
       getMemberOrders();
     }
-  },[])
+  }, [])
 
 
-  const getMemberOrders = () =>{
+  const getMemberOrders = () => {
 
     let memberId = member._id;
-     ordersUtils.getByMemberId({memberId}).then(resp=> {
-       let orders = resp.data.orderResult;
-       if(orders)
-       {
-         setOrders(orders.reverse());
-       }
-      });
+    ordersUtils.getByMemberId({ memberId }).then(resp => {
+      let orders = resp.data.orderResult;
+      if (orders) {
+        setOrders(orders.reverse());
+      }
+    });
 
     // let orders = resp.data.orderResult;
-   
+
   }
- 
+
   const App = () => <List list={orders} />;
   const List = ({ list }) => (
     <ul>
@@ -55,24 +53,23 @@ function MyOrdersComp(props) {
 
 
 
-    if(orders)
-    {
+  if (orders) {
     return (
       <div>
         <Card className="text-center">
           <Card.Header>
-            <Card.Title>הזמנות האחרונות</Card.Title>
+            <Card.Title sticky="top">הזמנות האחרונות</Card.Title>
           </Card.Header>
           <Card.Body>
             <React.Fragment>
-              {App()}
+                {App()}
             </React.Fragment>
           </Card.Body>
         </Card>
       </div>
     )
   }
-  if(!orders) {
+  if (!orders) {
     return (
       <div>
         <Card className="text-center">

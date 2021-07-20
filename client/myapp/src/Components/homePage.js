@@ -10,13 +10,13 @@ function HomePageComp() {
    
 
     return (
-        <div   style={{marginTop : 100}} >
+        <div className="text-center"   style={{marginTop : 100 }} >
             <Container>
                 <Row className="justify-content-center" >
                     <Col md="auto"><h1 className="Home1" >משלוחים מדואר מיתר</h1></Col>
                 </Row>
                 <Row className="justify-content-center">
-                    <Col md="auto"><h2   className="Home2" >משלוחים מהיום להיום</h2></Col>
+                    <Col md="auto"><h2   className="Home2" > מהיום להיום</h2></Col>
                 </Row>
                 <Row  className="justify-content-center" >
                   <Link to="/neworder" > <Button variant="outline-dark">הרשמה למשלוח</Button></Link> 

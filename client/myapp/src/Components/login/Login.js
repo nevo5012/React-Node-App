@@ -145,7 +145,7 @@ function LoginComp() {
     <div className="text-center"   >
 
       <div style={{ overflow: 'auto', marginTop: "100px" }} >
-        <Card style={{ width: '40rem', margin: 'auto' }} >
+        <Card style={{ width: '100%', margin: 'auto' }} >
           <Card.Body>
             <Card.Title>
               <h1>התחברות </h1>
