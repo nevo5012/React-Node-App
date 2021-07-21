@@ -58,7 +58,7 @@ function CheckOutComp(props) {
     if (confirm) {
         return (
             <div dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
-                <Card style={{ width: '40rem', margin: 'auto' }}>
+                <Card className="Card">
                     <Card.Header>
                         <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
                         - פרטי הזמנה
