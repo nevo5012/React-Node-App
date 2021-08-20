@@ -62,7 +62,7 @@ function MenuComp() {
 
   <Container>
     <Row>
-      <Col >
+      <Col>
       <Switch>
       <Route path='/myorders' component={MyOrdersComp} />
       <Route exact path='/' component={HomePageComp} />

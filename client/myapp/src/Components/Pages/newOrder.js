@@ -1,20 +1,11 @@
-import { Form, Button, Card, } from 'react-bootstrap/'
-import { useState, useEffect } from 'react';
+import { Form, Button, Card, Tooltip, Overlay, ListGroup } from 'react-bootstrap/'
+import { useState, useEffect, useRef } from 'react';
 import './App.css'
 import OrderComp from './order';
-import { Link } from 'react-router-dom';
 import CheckOutComp from './checkOut';
+import ordersUtils from './ordersUtils';
 
-function getDate(params) {
-    let currentDate = new Date();
-    var dd = String(currentDate.getDate()).padStart(2, '0');
-    var mm = String(currentDate.getMonth() + 1).padStart(2, '0');
-    var yyyy = currentDate.getFullYear();
-    var hh = currentDate.getHours();
-    var min = currentDate.getMinutes();
-    currentDate = hh + ":" + min + " " + dd + '/' + mm + '/' + yyyy;
-    return currentDate;
-}
+
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
     if (!stored) {
@@ -24,6 +15,9 @@ function getSessionStorageOrDefault(key, defaultValue) {
 }
 
 function NewOrderComp(props) {
+    const [show, setShow] = useState(false);
+    const target = useRef(null);
+
     const [packCont, setPackCont] = useState(0);
     const [member] = useState(
         getSessionStorageOrDefault('member', false)
@@ -32,34 +26,52 @@ function NewOrderComp(props) {
     const [shelfNum, setShelfNum] = useState('');
     const [trackNum, settrackNum] = useState('')
     const [newOrder, setNewOrder] = useState({
-        date: getDate(),
+        date: ordersUtils.getDate(),
         order_data: [],
         mailbox: '',
         member_id: member._id,
-        pack_counter: ''
+        pack_counter: '',
+        status: 0,
+        payment: 0,
+        notes: "",
+        mail:''
     });
     const [validated, setValidated] = useState(false);
-    const [checkOut, setCheckOut] = useState(false)
+    const [checkOut, setCheckOut] = useState(false);
+    const [showInput, setShowInput] = useState(false);
 
     const handleSubmit = (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
+        let duplication = false
+        if (packCont !== '') {
+            newOrder.order_data.forEach(od => {
+
+                if (od.tracking_number === trackNum || od.shelf_number === shelfNum) {
+                    setValidated(false)
+                    event.stopPropagation();
+                    duplication = true
+                    setShow(true)
+                }
+            })
+        }
 
         if (form.checkValidity() === false) {
-            event.preventDefault();
             event.stopPropagation();
         }
-        else {
+
+        else if (duplication === false) {
+            setShow(false)
             let numOfPack = packCont
-            event.preventDefault();
             let obj = { shelf_number: shelfNum, tracking_number: trackNum };
             newOrder.order_data.push(obj);
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-         }
+        }
         setValidated(true);
-        event.target.reset();
-    };
+    }
+
 
     const sendForm = () => {
         setCheckOut(true)
@@ -67,7 +79,6 @@ function NewOrderComp(props) {
 
     useEffect(() => {
         if (!sessionStorage.member) {
-            console.log("yes")
             alert("על מנת להזמין משלוח עליך להתחבר למערכת")
             props.history.push("/login")
         }
@@ -91,6 +102,8 @@ function NewOrderComp(props) {
                     <Card.Body >
                         <Form noValidate validated={validated} onSubmit={handleSubmit}    >
                             <Form.Group controlId="validationCustom01">
+                                <Form.Label>מספר מדף</Form.Label>
+
                                 <Form.Control
                                     type="text"
                                     maxLength="5"
@@ -98,9 +111,12 @@ function NewOrderComp(props) {
                                     required
                                     onChange={e => setShelfNum(e.target.value)}
                                     placeholder="הכנס מספר מדף (לדוגמא ג124)" />
-                                <Form.Control.Feedback type="invalid">
+                                <Form.Control.Feedback type="invalid" >
                                     אנא הקלד מספר מדף תקין
                                 </Form.Control.Feedback>
+                                <br />
+                                <Form.Label>מספר מעקב</Form.Label>
+
                                 <Form.Control
                                     type="text"
                                     maxLength="13"
@@ -108,7 +124,7 @@ function NewOrderComp(props) {
                                     required
                                     onChange={e => settrackNum(e.target.value)}
                                     placeholder="הכנס מספר מעקב" />
-                                <Form.Control.Feedback type="invalid">
+                                <Form.Control.Feedback type="invalid" >
                                     אנא הכנס מספר מעקב תקין.
                                 </Form.Control.Feedback>
                                 <a href={"https://mypost.israelpost.co.il/lp?itemcode=" + trackNum}
@@ -117,21 +133,49 @@ function NewOrderComp(props) {
                                 </a>
                                 <br />
                             </Form.Group>
-                            <Button type="submit" > הוסף פריט למשלוח</Button><br /><br />
+                            <Form.Group>
+                                <Form.Label> תוספת דואר מהתיבה ב5 שקלים? </Form.Label>{' '}
+                                <Button variant="outline-primary" onClick={e => setShowInput(true)}>כן</Button>{' '}
+                                <Button variant="outline-primary" onClick={e => setShowInput(false),setNewOrder({...newOrder,mailbox:''})}>לא</Button>
+
+                            </Form.Group>
+                            <ListGroup.Item  style={{ display: showInput ? 'block' : 'none' }}>
+                                
+                                <Form.Control
+                                    placeholder="מספר תא דואר"
+                                    onChange={e => setNewOrder({ ...newOrder, mailbox: e.target.value })}>
+                                </Form.Control>
+                            </ListGroup.Item>
+                            <br />
+                            <Button ref={target} type="submit" > הוסף פריט למשלוח</Button>
+                            <Overlay
+                                variant="danger"
+                                target={target.current}
+                                show={show}
+                                placement="bottom">
+                                {(props) => (
+                                    <Tooltip id="overlay-example" {...props}>
+                                        פריט זה כבר נוסף להזמנה, באפשרותך להוסיף פריטים נוספים לאותו משלוח או להמשיך לסיום ההזמנה
+                                    </Tooltip>
+                                )}
+                            </Overlay>
+                            <br /><br />
                         </Form >
                     </Card.Body>
                 </Card>
+
             </div>
             <div style={{ display: packCont ? 'block' : 'none' }}  >
                 <Card className="Card">
-                    <Card.Header> <Card.Title> פריטים להזמנה - {packCont}</Card.Title> </Card.Header>
+                    <Card.Header> <Card.Title> מספר פריטים להזמנה  - {packCont}</Card.Title> </Card.Header>
                     <OrderComp order={newOrder} packCont={1} />
-                     <Button variant="success" onClick={sendForm} > המשך לסיום הזמנה</Button> 
+
+                    <Button variant="success" onClick={sendForm} > המשך לסיום הזמנה</Button>
                 </Card>
             </div>
         </div>
     )
-    
+
 
 }
 
