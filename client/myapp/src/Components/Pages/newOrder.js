@@ -56,8 +56,7 @@ function NewOrderComp(props) {
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-            console.log(newOrder)
-        }
+         }
         setValidated(true);
         event.target.reset();
     };
