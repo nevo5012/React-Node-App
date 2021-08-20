@@ -1,5 +1,6 @@
-import { Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap/'
-import { InfoCircle, } from 'react-bootstrap-icons';
+import { Table, Button, OverlayTrigger, Tooltip, Card } from 'react-bootstrap/'
+import { InfoCircle } from 'react-bootstrap-icons';
+import React from 'react';
 
 function OrderComp(props) {
 
@@ -7,38 +8,77 @@ function OrderComp(props) {
         window.open("https://mypost.israelpost.co.il/lp?itemcode=" + t);
     }
 
+
+    const delivertStat = (s) => {
+        if (s === 0) {
+            return "הזמנה בתהליך משלוח"
+        }
+        if (s === 1) {
+            return "הזמנה בתהליך הוצאה מהסניף"
+        }
+        if (s === 2) {
+            return "הזמנה הושלמה בהצלחה"
+        }
+        if (s === 3) {
+            return "הזמנה בוטלה"
+        }
+    }
+
+    const getColor = (s) => {
+        if (s === 0) {
+            return "warning"
+        }
+        if (s === 1) {
+            return "info"
+        }
+        if (s === 2) {
+            return "success"
+        }
+        if (s === 3) {
+            return "danger"
+        }
+    }
+
     return (
         <div >
-            <Table border="secondary" style={{ width: '90%' }} striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th colSpan="2"> <p style={{ display: props.packCont ? 'none' : 'block' }}>הזמנה מתאריך - {props.order.date}  </p> </th>
-                    </tr>
-                </thead>
-                <thead>
-                    <tr>
-                        <th>מס' מעקב</th>
-                        <th>מס' מדף</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {props.order.order_data.map((item, index) => {
-                        return <tr key={index} >
-                            <td >
+            <Card border={getColor(props.order.status)}>
+                <Card.Header style={{ display: props.packCont ? 'none' : 'block' }}> סטטוס - {delivertStat(props.order.status)}</Card.Header>
+                <Table striped bordered hover size="sm">
 
-                                <Button variant="link" onClick={e => packageInfo(item.tracking_number)}>
-                                    <InfoCircle ></InfoCircle>
-                                </Button> {item.tracking_number}
-
-                              
-
-                            </td>
-                            <td> {item.shelf_number} </td>
+                    <thead>
+                        <tr>
+                            <th>מס' מדף</th>
+                            <th>מס' מעקב</th>
                         </tr>
-                    })}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {props.order.order_data.map((item) => {
+                            return <tr key={item.tracking_number}  >
+                                <td> {item.shelf_number} </td>
+                                <td>
 
+                                    <Button variant="link" onClick={e => packageInfo(item.tracking_number)}>
+
+                                        <OverlayTrigger
+                                            placement="bottom"
+                                            overlay={<Tooltip id="button-tooltip-2">בדיקת סטטוס בדואר ישראל</Tooltip>}
+                                        >
+                                            {({ ref, ...triggerHandler }) => (
+                                                <InfoCircle  {...triggerHandler} ref={ref} roundedCircle />
+                                            )}
+                                        </OverlayTrigger>
+
+                                    </Button> {item.tracking_number}
+                                </td>
+                            </tr>
+                        })}
+                    </tbody>
+                </Table>
+                <Card.Footer style={{ display: props.packCont ? 'none' : 'block' }}>
+                    <small className="text-muted"> הזמנה מתאריך - {props.order.date}   </small>
+                </Card.Footer>
+            </Card>
+            <br />
         </div>
     )
 }

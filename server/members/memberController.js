@@ -45,6 +45,7 @@ appRoute.route('/:id').put(async function(req,resp)
     let id = req.params.id
     let newmember = req.body
     let result = await updateMember(id,newmember)
+    console.log(newmember)
     return resp.json(result)
 })
 

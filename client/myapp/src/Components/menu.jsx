@@ -1,4 +1,4 @@
-import { Navbar, Nav, Button, Container, NavDropdown, Row, Col } from 'react-bootstrap/';
+import { Navbar, Nav, Button, Container,  Row, Col } from 'react-bootstrap/';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Route, Link } from "react-router-dom";
@@ -11,7 +11,9 @@ import LoginComp from './login/Login';
 import logo from './logo.png';
 import { useState } from 'react';
 import { authService } from '../_services/auth.service';
-
+import AllOrdersComp from './admin/pages/TableList/AllOrders';
+import AllMembersComp from './admin/pages/TableList/AllMembers';
+ 
 function getSessionStorageOrDefault(key, defaultValue) {
   const stored = sessionStorage.getItem(key);
   if (!stored) {
@@ -38,48 +40,50 @@ function MenuComp() {
         </Navbar.Brand>
         <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse     id="responsive-navbar-nav">
-          <Nav  className="me-auto">
-            <LinkContainer style={{display : session? 'block' : 'none' }} to="/neworder">
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-right">
+            <LinkContainer style={{ display: session ? 'block' : 'none' }} to="/neworder">
               <Nav.Link>הזמנת משלוח</Nav.Link>
             </LinkContainer>
-            <LinkContainer style={{display : session? 'block' : 'none' }} to="/myorders">
+            <LinkContainer style={{ display: session ? 'block' : 'none' }} to="/myorders">
               <Nav.Link>המשלוחים שלי</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Container>
-      <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="mr-auto" style={{ display: session ? 'none' : 'block' }}>
+
+      <Navbar.Collapse style={{ marginRight: "20px" }} className="justify-content-end">
+        <Nav style={{ display: session ? 'none' : 'block', marginRight: "10px" }}>
           <Link to="/login"> <Button >התחברות</Button></Link>
         </Nav>
-        <Nav className="me-auto" style={{ display: session ? 'block' : 'none' }}>
+        <Nav style={{ display: session ? 'block' : 'none' }}>
           <Button onClick={authService.logout} >התנתק</Button>
         </Nav>
       </Navbar.Collapse>
+
     </Navbar>
 
 
-  <Container>
-    <Row>
-      <Col>
-      <Switch>
-      <Route path='/myorders' component={MyOrdersComp} />
-      <Route exact path='/' component={HomePageComp} />
-      <Route path='/home' component={HomePageComp} />
-      <Route path='/checkout/:id' component={CheckOutComp} />
-      <Route path='/checkout' component={CheckOutComp} />
+    <Container>
+      <Row>
+        <Col >
+          <Switch>
+            <Route exact path='/' component={HomePageComp} />
+            <Route path='/myorders' component={MyOrdersComp} />
+            <Route path='/home' component={HomePageComp} />
+            <Route path='/checkout/:id' component={CheckOutComp} />
+            <Route path='/checkout' component={CheckOutComp} />
+            <Route path='/neworder' component={newOrderComp} />
+            <Route path='/checkout' component={CheckOutComp} />
+            <Route path='/OrderConfim' component={OrderConfimComp} />
+            <Route path='/login' component={LoginComp} />
+            <Route path='/allorders' component={AllOrdersComp} />
+            <Route path='/allmembers' component={AllMembersComp} />
+          </Switch>
+        </Col>
+      </Row>
+    </Container>
 
-
-      <Route path='/neworder' component={newOrderComp} />
-      <Route path='/checkout' component={CheckOutComp} />
-      <Route path='/OrderConfim' component={OrderConfimComp} />
-      <Route path='/login' component={LoginComp} />
-    </Switch>
-      </Col>
-    </Row>
-  </Container>
-    
   </div>;
 }
 

@@ -8,7 +8,12 @@ let ordersSchema = new appSchema(
         order_data : [{tracking_number : String, shelf_number : String}],
         mailbox : String,
         member_id : String,
-        pack_counter : Number
+        pack_counter : Number,
+        status : Number,
+        payment : Number,
+        member_notes : String,
+        admin_notes: String
+
     }
 )
 

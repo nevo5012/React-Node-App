@@ -54,6 +54,8 @@ export function addMember(data)
                 house_number : data.house_number,
                 phone : data.phone,
                 email : data.email,
+                orders_counter: data.orders_counter
+
             })
             toAdd.save(function(err)
             {
@@ -98,7 +100,10 @@ export function updateMember(id, data)
             city : data.city,
             street : data.street,
             house_number : data.house_number,
-            orders : data.orders
+            phone: data.phone,
+            email: data.email,
+            orders_counter: data.orders_counter
+
         },function(err)
         {
             if(err)

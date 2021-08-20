@@ -1,11 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
-import { Button, Modal, Form, Row, Col, InputGroup, Toast, Overlay, Popover } from 'react-bootstrap';
+import { Button, Modal, Form, Col, Alert } from 'react-bootstrap';
 import { authService } from '../../_services/auth.service';
 import loginUtils from './loginUtils';
 
 export const RegisterComp = (props) => {
 
+    const [show, setShow] = useState(false);
     const [user, setUser] = useState({
         email: '',
         password: '',
@@ -19,15 +20,14 @@ export const RegisterComp = (props) => {
         house_number: '',
         phone: '',
         email: user.email,
-        orders: []
+        orders_counter : 0
     });
     const [validated, setValidated] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [show, setShow] = useState(false);
 
     const handleSubmit = (event) => {
         const form = event.currentTarget;
-        if (form.checkValidity() === false || checkPassword() === false) {
+        if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
         }
@@ -38,40 +38,34 @@ export const RegisterComp = (props) => {
         setValidated(true);
     };
 
-    const checkPassword = () => {
-        if (user.password === confirmPassword) {
-            return true
-        }
-        else {
-            setShow(true)
-            return false
-        }
-    }
+
 
     const registerNewUser = async () => {
         let resp = await authService.register(user)
-        console.log(resp);
+        console.log(resp.data);
         if (resp.data === 'email already in use') {
             console.log(resp.data)
         }
         else {
-              let resp2 = await loginUtils.addNewMember(member);
-              console.log(resp2.data);
-              alert("נרשמת למערכת בהצלחה. נא להתחבר עם המייל והסיסמה ")
-              window.location.assign('/login')
+            let resp2 = await loginUtils.addNewMember(member);
+            console.log(resp2.data);
+            setShow(true)
+            
         }
     }
 
 
     return (
         <div  >
+
             <Modal.Header   >
                 <Modal.Title id="contained-modal-title-vcenter">
                     הרשמה
                 </Modal.Title>
-                <Button onClick={props.onHide}>חזור</Button>
             </Modal.Header >
             <Modal.Body >
+
+                
                 <Form noValidate validated={validated} onSubmit={handleSubmit} >
                     <Form.Group controlId="validationCustom01">
                         <Form.Row>
@@ -89,6 +83,7 @@ export const RegisterComp = (props) => {
                                     נא למלא שם פרטי
                                 </Form.Control.Feedback>
                             </Form.Group>
+
                             <Form.Group as={Col}>
                                 <Form.Control
                                     type="text"
@@ -103,6 +98,7 @@ export const RegisterComp = (props) => {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
+
                         <Form.Row>
                             <Form.Group as={Col}>
                                 <Form.Control
@@ -111,6 +107,7 @@ export const RegisterComp = (props) => {
                                     placeholder='דוא"ל'
                                     minLength="8"
                                     required
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                                     onChange={e => setUser({ ...user, email: e.target.value }, setMember({ ...member, email: e.target.value }))} />
                                 <Form.Control.Feedback type="invalid">
                                     נא להכניס כתובת דוא"ל
@@ -119,11 +116,13 @@ export const RegisterComp = (props) => {
                             <Form.Group as={Col}>
                                 <Form.Control
                                     name="phone"
+                                    type="tel"
                                     minLength="10"
-                                    maxLength="11"
+                                    maxLength="10"
                                     required
+                                    pattern="[0]{1}[5]{1}[0-9]{1}[0-9]{7}"
                                     onChange={e => setMember({ ...member, phone: e.target.value })}
-                                    placeholder="מספר נייד" />
+                                    placeholder="מספר טלפון נייד" />
                                 <Form.Control.Feedback type="invalid">אנא הכנס מספר נייד תקין </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
@@ -151,7 +150,7 @@ export const RegisterComp = (props) => {
                                     placeholder=" סיסמה שוב"
                                     pattern={user.password}
                                 />
-                                <Form.Control.Feedback  type="invalid" >הסיסמה לא זהה </Form.Control.Feedback> 
+                                <Form.Control.Feedback type="invalid" >הסיסמה לא זהה </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
                         <Form.Group controlId="">
@@ -188,17 +187,31 @@ export const RegisterComp = (props) => {
                                     placeholder="מספר בית"
                                     name="house_number"
                                     required
+                                    type="number"
                                     onChange={e => setMember({ ...member, house_number: e.target.value })} />
                                 <Form.Control.Feedback type="invalid">
                                     אנא הכנס מספר בית
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </Form.Row>
+
                         <Button type="submit" size="lg">
                             הרשמה
                         </Button>
                     </Form.Group>
                 </Form>
+                <Alert style={{ zIndex: "+1"   }} show={show} variant="success">
+                    <Alert.Heading>מעולה !   </Alert.Heading>
+                    <Alert.Heading> נרשמת בהצלחה </Alert.Heading>
+
+                   <h5>ssad</h5>
+                    <hr />
+                    <div className="d-flex justify-content-end">
+                        <Button variant="outline-success">
+                            קדימה
+                        </Button>
+                    </div>
+                </Alert>
             </Modal.Body>
         </div>
     );

@@ -1,7 +1,6 @@
 import { Router } from 'express'
-import { getAllOrders, addOrder, getAOrder, getByMemberId } from './ordersUtils.js'
-
-
+import { getAllOrders, addOrder, getAOrder, getByMemberId, updateOrder } from './ordersUtils.js'
+ 
 const appRoute = Router()
 
 
@@ -11,7 +10,7 @@ appRoute.route('/').get(async function(req,resp)
     return resp.json(orders)
 })
 
-
+ 
 appRoute.route('/').post(async function(req,resp)
 {
     let newOrder = req.body;
@@ -55,4 +54,16 @@ appRoute.route('/:id').get(async function(req, resp)
     return resp.json(order)
 })
 
+appRoute.route('/:id').put(async function(req,resp)
+{
+    let id = req.params.id
+    let order = req.body
+    let result = await updateOrder(id,order)
+    return resp.json(result)
+})
+
+appRoute.route('/getall').get(async function(req,resp)
+{
+
+})
 export default appRoute;

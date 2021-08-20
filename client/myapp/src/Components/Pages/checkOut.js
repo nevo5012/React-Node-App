@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import utils from './utils';
 import './App.css'
+
 function getSessionStorageOrDefault(key, defaultValue) {
     const stored = sessionStorage.getItem(key);
     if (!stored) {
@@ -14,32 +15,34 @@ function getSessionStorageOrDefault(key, defaultValue) {
 
 function getTotal(num, mail) {
     let price = 10;
-    if (mail.length > 1) {
-        num = num + 1
-    }
+
 
     if (num > 1) {
         price = 5;
     }
     num = num * price
+    if (mail.length > 1) {
+        num = num + 5
+    }
     return num
 }
 
 function CheckOutComp(props) {
 
-    
-    const [order,setOrder] = useState(props.newOrder);
+    const [member, setMember] = useState(
+        getSessionStorageOrDefault('member', false)
+    )
+    const [order, setOrder] = useState(props.newOrder);
     const [total] = useState(
-         getTotal(props.newOrder.pack_counter, props.newOrder.mailbox)
+        getTotal(props.newOrder.pack_counter, props.newOrder.mailbox)
     )
     const [value, setValue] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const handleChange = (val) => setValue(val);
 
     useEffect(() => {
-        console.log(props.newOrder)
         setOrder(props.newOrder)
-    },[props]);
+    }, [props]);
 
     const sendOrder = async () => {
         if (value === false) {
@@ -50,20 +53,21 @@ function CheckOutComp(props) {
                 '_blank'
             );
         }
-         await ordersUtils.addNewOrder(order)
+        await ordersUtils.addNewOrder(order)
+
+        
+         utils.updateMember(member, member._id)
+
         setConfirm(true)
     }
 
-
-
-    
     if (confirm) {
         return (
             <div dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
                 <Card className="Card">
                     <Card.Header>
-                        <Card.Title>תודה, הזמנתך הושלמה  </Card.Title>
-                        - פרטי הזמנה
+                        <Card.Title>תודה, הזמנתך נשלחה  </Card.Title>
+                        פרטי הזמנה:
                     </Card.Header>
 
                     <ListGroup variant="flush">
@@ -87,7 +91,7 @@ function CheckOutComp(props) {
                     <Card.Header> <Card.Title>סיכום הזמנה</Card.Title>   </Card.Header>
                     <Card.Body>
                         <Card.Text >
-                            <Card.Header>   {props.newOrder.pack_counter} - מספר פריטים להזמנה </Card.Header>
+                            <Card.Header>  מספר פריטים להזמנה - {props.newOrder.pack_counter}  </Card.Header>
                             <ListGroup variant="flush">
                                 {order.order_data.map((item, index) => {
                                     return <ListGroup.Item
@@ -99,7 +103,10 @@ function CheckOutComp(props) {
                                 <ListGroup.Item
                                     style={{ display: order.mailbox ? 'block' : 'none' }}
                                     action variant="light">
-                                    {order.mailbox} - תא דואר
+                                    תא דואר - {order.mailbox}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <input placeholder="הערות לשליח" onChange={e => setOrder({ ...order, member_notes: e.target.value })}></input>
                                 </ListGroup.Item>
                             </ListGroup>
                         </Card.Text>

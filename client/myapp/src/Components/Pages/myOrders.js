@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
-import { Card, Navbar, Table } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import OrderComp from "./order";
 
 function getSessionStorageOrDefault(key, defaultValue) {
@@ -37,18 +37,13 @@ function MyOrdersComp(props) {
         setOrders(orders.reverse());
       }
     });
-
-    // let orders = resp.data.orderResult;
-
   }
 
   const App = () => <List list={orders} />;
   const List = ({ list }) => (
-    <ul>
-      {orders.map(item => (
-        <OrderComp key={item._id} order={item} />
-      ))}
-    </ul>
+    list.map(item => (
+      <OrderComp key={item._id} order={item} />
+    ))
   );
 
 
@@ -56,13 +51,13 @@ function MyOrdersComp(props) {
   if (orders) {
     return (
       <div>
-        <Card className="text-center">
+        <Card border="dark" className="text-center">
           <Card.Header>
             <Card.Title sticky="top">הזמנות האחרונות</Card.Title>
           </Card.Header>
           <Card.Body>
             <React.Fragment>
-                {App()}
+              {App()}
             </React.Fragment>
           </Card.Body>
         </Card>

@@ -19,7 +19,7 @@ function NewOrderComp(props) {
     const target = useRef(null);
 
     const [packCont, setPackCont] = useState(0);
-    const [member] = useState(
+    const [member,setMember] = useState(
         getSessionStorageOrDefault('member', false)
     )
 
@@ -33,8 +33,8 @@ function NewOrderComp(props) {
         pack_counter: '',
         status: 0,
         payment: 0,
-        notes: "",
-        mail:''
+        member_notes: "",
+
     });
     const [validated, setValidated] = useState(false);
     const [checkOut, setCheckOut] = useState(false);
@@ -68,12 +68,19 @@ function NewOrderComp(props) {
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
+            
+            
         }
         setValidated(true);
     }
 
 
     const sendForm = () => {
+             let m = member;
+             let c = m.orders_counter + 1
+            member.orders_counter = c
+            
+            sessionStorage.setItem('member', JSON.stringify(member))
         setCheckOut(true)
     }
 
@@ -135,13 +142,19 @@ function NewOrderComp(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label> תוספת דואר מהתיבה ב5 שקלים? </Form.Label>{' '}
-                                <Button variant="outline-primary" onClick={e => setShowInput(true)}>כן</Button>{' '}
-                                <Button variant="outline-primary" onClick={e => setShowInput(false),setNewOrder({...newOrder,mailbox:''})}>לא</Button>
+                                <Button 
+                                variant="outline-primary" 
+                                onClick={e => setShowInput(true)}>כן</Button>{' '}
+                                <Button
+                                    variant="outline-primary"
+                                    onClick={e => setShowInput(false, setNewOrder({ ...newOrder, mailbox: "" }))}>
+                                    לא</Button>
 
                             </Form.Group>
-                            <ListGroup.Item  style={{ display: showInput ? 'block' : 'none' }}>
-                                
+                            <ListGroup.Item style={{ display: showInput ? 'block' : 'none' }}>
+
                                 <Form.Control
+                                    value={newOrder.mailbox}
                                     placeholder="מספר תא דואר"
                                     onChange={e => setNewOrder({ ...newOrder, mailbox: e.target.value })}>
                                 </Form.Control>

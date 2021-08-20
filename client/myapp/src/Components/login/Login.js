@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { authService } from '../../_services/auth.service'
-import { Button, Card, Form, Modal } from 'react-bootstrap/';
+import { Alert, Button, Card, Col, Form, Modal, Row, Toast } from 'react-bootstrap/';
 import RegisterComp from './register';
 
 function MyVerticallyCenteredModal(props) {
@@ -26,6 +26,7 @@ function LoginComp() {
   const [password, setPassword] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -33,15 +34,15 @@ function LoginComp() {
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
+
     }
-    else
-    {
+    else {
       const data = await authService.login({
         email,
         password
       });
       if (data.member === undefined) {
-        alert("שם המשתמש או הסיסמה שגויים")
+        setShow(true)
       }
       else {
         sessionStorage['email'] = data.email
@@ -50,45 +51,59 @@ function LoginComp() {
       }
     }
     setValidated(true);
-  
-     
-  
   }
+
+
+
 
   return (
     <div className="text-center"   >
       <div style={{ overflow: 'auto', marginTop: "100px" }} >
-        <Card  className="Card" >
+
+        <Card className="Card" >
           <Card.Body>
             <Card.Title>
               <h1>התחברות </h1>
             </Card.Title>
+
             <Form noValidate validated={validated} onSubmit={handleSubmit} >
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>דוא"ל</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="email"
                   onChange={e => setEmail(e.target.value)}
                   placeholder='דוא"ל'
                   required
                 />
-
+                <Form.Control.Feedback type="invalid">
+                  נא נהקליד כתובת דוא"ל תקינה
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>סיסמה</Form.Label>
                 <Form.Control type="password"
+                  minLength="6"
                   required
                   onChange={e => setPassword(e.target.value)}
                   placeholder="סיסמה" />
+                <Form.Control.Feedback type="invalid">
+                  נא להקליד סיסמה
+                </Form.Control.Feedback>
               </Form.Group>
 
-               
-                <Button type="submit"   >התחבר/י</Button>
-               
+              <Alert show={show} variant="danger">
+                <div>
+                  <p>
+                    דוא"ל או הסיסמה שגויים, אנא נסה שנית
+                  </p>
+                </div>
+              </Alert >
+
+              <Button type="submit"   >התחבר/י</Button>
             </Form>
             <br />
             <Card.Text>
-              עדיין אין משתמש ?     <Button variant="link" onClick={() => setModalShow(true)}>לחץ כאן </Button>
+              עדיין אין משתמש ? <Button variant="link" onClick={() => setModalShow(true)}>לחץ כאן </Button>
             </Card.Text>
           </Card.Body>
         </Card>

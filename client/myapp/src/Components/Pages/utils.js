@@ -9,8 +9,8 @@ const getMember = (id)=>
 const updateMember = (obj,id)=>
 {
     axios.put("http://localhost:8000/api/members/"+id,obj)
-    alert('updateted !')
 }
+
 
 
 
