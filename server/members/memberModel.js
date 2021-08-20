@@ -14,7 +14,7 @@ let memberSchema = new appSchema(
         house_number : String,
         phone : String,
         email : String,
-        orders : [  String ]
+       
     }
 )
 

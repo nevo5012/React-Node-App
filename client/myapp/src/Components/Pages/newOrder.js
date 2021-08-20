@@ -53,12 +53,6 @@ function NewOrderComp(props) {
             event.preventDefault();
             let obj = { shelf_number: shelfNum, tracking_number: trackNum };
             newOrder.order_data.push(obj);
-            let currentDate = new Date();
-            var dd = String(currentDate.getDate()).padStart(2, '0');
-            var mm = String(currentDate.getMonth() + 1).padStart(2, '0');
-            var yyyy = currentDate.getFullYear();
-            currentDate = dd + '/' + mm + '/' + yyyy;
-            setNewOrder({ ...newOrder, date: 123 })
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
@@ -69,9 +63,6 @@ function NewOrderComp(props) {
 
     const sendForm = () => {
         setCheckOut(true)
-        console.log(props.order)
-        sessionStorage.setItem('order', JSON.stringify(newOrder));
-        sessionStorage.setItem('memberid', JSON.stringify(newOrder.member_id));
     }
 
     useEffect(() => {
@@ -81,13 +72,16 @@ function NewOrderComp(props) {
             props.history.push("/login")
         }
     })
+
+
     if (checkOut) {
         return (
             <div>
-                <CheckOutComp order={newOrder} />
+                <CheckOutComp newOrder={newOrder} />
             </div>
         )
     };
+
 
     return (
         <div dir="rtl" className="text-center" >
@@ -132,11 +126,13 @@ function NewOrderComp(props) {
                 <Card className="Card">
                     <Card.Header> <Card.Title> פריטים להזמנה - {packCont}</Card.Title> </Card.Header>
                     <OrderComp order={newOrder} packCont={1} />
-                    <Link to="/checkout" > <Button variant="success" onClick={sendForm} > המשך לסיום הזמנה</Button>  </Link>
+                     <Button variant="success" onClick={sendForm} > המשך לסיום הזמנה</Button> 
                 </Card>
             </div>
         </div>
     )
+    
+
 }
 
 export default NewOrderComp;

@@ -1,5 +1,5 @@
-import { Table } from 'react-bootstrap/'
-
+import { Table, Button, OverlayTrigger, Tooltip } from 'react-bootstrap/'
+import { InfoCircle, } from 'react-bootstrap-icons';
 
 function OrderComp(props) {
 
@@ -9,10 +9,10 @@ function OrderComp(props) {
 
     return (
         <div >
-            <Table border="secondary" style={{ width: '100%' }} striped bordered hover size="sm">
+            <Table border="secondary" style={{ width: '90%' }} striped bordered hover size="sm">
                 <thead>
                     <tr>
-                        <th colSpan="2"> <p style={{ display: props.packCont ? 'none' : 'block' }}> {props.order.date}</p> </th>
+                        <th colSpan="2"> <p style={{ display: props.packCont ? 'none' : 'block' }}>הזמנה מתאריך - {props.order.date}  </p> </th>
                     </tr>
                 </thead>
                 <thead>
@@ -23,13 +23,22 @@ function OrderComp(props) {
                 </thead>
                 <tbody>
                     {props.order.order_data.map((item, index) => {
-                        return <tr onClick={e => packageInfo(item.tracking_number)} key={index} >
-                            <td > {item.tracking_number}</td>
-                            <td> {item.shelf_number}</td>
+                        return <tr key={index} >
+                            <td >
+
+                                <Button variant="link" onClick={e => packageInfo(item.tracking_number)}>
+                                    <InfoCircle ></InfoCircle>
+                                </Button> {item.tracking_number}
+
+                              
+
+                            </td>
+                            <td> {item.shelf_number} </td>
                         </tr>
                     })}
                 </tbody>
             </Table>
+
         </div>
     )
 }

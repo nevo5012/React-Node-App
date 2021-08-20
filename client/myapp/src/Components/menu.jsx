@@ -38,12 +38,12 @@ function MenuComp() {
         </Navbar.Brand>
         <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            <LinkContainer to="/neworder">
+        <Navbar.Collapse     id="responsive-navbar-nav">
+          <Nav  className="me-auto">
+            <LinkContainer style={{display : session? 'block' : 'none' }} to="/neworder">
               <Nav.Link>הזמנת משלוח</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/myorders">
+            <LinkContainer style={{display : session? 'block' : 'none' }} to="/myorders">
               <Nav.Link>המשלוחים שלי</Nav.Link>
             </LinkContainer>
           </Nav>
@@ -53,7 +53,7 @@ function MenuComp() {
         <Nav className="mr-auto" style={{ display: session ? 'none' : 'block' }}>
           <Link to="/login"> <Button >התחברות</Button></Link>
         </Nav>
-        <Nav className="mr-auto" style={{ display: session ? 'block' : 'none' }}>
+        <Nav className="me-auto" style={{ display: session ? 'block' : 'none' }}>
           <Button onClick={authService.logout} >התנתק</Button>
         </Nav>
       </Navbar.Collapse>
@@ -68,6 +68,9 @@ function MenuComp() {
       <Route exact path='/' component={HomePageComp} />
       <Route path='/home' component={HomePageComp} />
       <Route path='/checkout/:id' component={CheckOutComp} />
+      <Route path='/checkout' component={CheckOutComp} />
+
+
       <Route path='/neworder' component={newOrderComp} />
       <Route path='/checkout' component={CheckOutComp} />
       <Route path='/OrderConfim' component={OrderConfimComp} />

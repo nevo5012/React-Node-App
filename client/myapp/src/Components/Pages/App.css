@@ -16,8 +16,8 @@
   letter-spacing: 0.5px;
   line-height: 1.2;
   color: #5e6f78;
-  
   }
+  
   @media only screen and (max-width:500px) {
     /* For mobile phones: */
     .Home1 {

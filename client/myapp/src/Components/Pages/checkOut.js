@@ -1,5 +1,5 @@
 import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup } from 'react-bootstrap/'
-import { useState, } from 'react';
+import { useEffect, useState, } from 'react';
 import { Link } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import utils from './utils';
@@ -27,18 +27,19 @@ function getTotal(num, mail) {
 
 function CheckOutComp(props) {
 
-    const [member] = useState(
-        getSessionStorageOrDefault('member', {})
-    )
-    const [order] = useState(
-        getSessionStorageOrDefault('order', false)
-    );
+    
+    const [order,setOrder] = useState(props.newOrder);
     const [total] = useState(
-        getTotal(order.pack_counter, order.mailbox)
+         getTotal(props.newOrder.pack_counter, props.newOrder.mailbox)
     )
     const [value, setValue] = useState(false)
     const [confirm, setConfirm] = useState(false)
     const handleChange = (val) => setValue(val);
+
+    useEffect(() => {
+        console.log(props.newOrder)
+        setOrder(props.newOrder)
+    },[props]);
 
     const sendOrder = async () => {
         if (value === false) {
@@ -49,12 +50,13 @@ function CheckOutComp(props) {
                 '_blank'
             );
         }
-        let resp = await ordersUtils.addNewOrder(order)
-        member.orders.push(resp.data._id)
-        await utils.updateMember(member, member._id)
+         await ordersUtils.addNewOrder(order)
         setConfirm(true)
     }
 
+
+
+    
     if (confirm) {
         return (
             <div dir="rtl" className="text-center" style={{ overflow: 'auto', marginTop: "100px" }}>
@@ -85,7 +87,7 @@ function CheckOutComp(props) {
                     <Card.Header> <Card.Title>סיכום הזמנה</Card.Title>   </Card.Header>
                     <Card.Body>
                         <Card.Text >
-                            <Card.Header>   {order.pack_counter} - מספר פריטים להזמנה </Card.Header>
+                            <Card.Header>   {props.newOrder.pack_counter} - מספר פריטים להזמנה </Card.Header>
                             <ListGroup variant="flush">
                                 {order.order_data.map((item, index) => {
                                     return <ListGroup.Item
