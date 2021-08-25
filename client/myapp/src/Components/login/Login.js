@@ -1,31 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
 import { authService } from '../../_services/auth.service'
-import { Alert, Button, Card, Col, Form, Modal, Row, Toast } from 'react-bootstrap/';
-import RegisterComp from './register';
-
-function MyVerticallyCenteredModal(props) {
-
-  return (
-    <div>
-      <Modal
-        dir="rtl"
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        className="text-center">
-        <RegisterComp />
-      </Modal>
-    </div>
-  );
-}
+import { Alert, Button, Card, Form  } from 'react-bootstrap/';
+ 
+import { Link } from 'react-router-dom';
+ 
 
 function LoginComp() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [modalShow, setModalShow] = useState(false);
-  const [validated, setValidated] = useState(false);
+   const [validated, setValidated] = useState(false);
   const [show, setShow] = useState(false);
 
   const handleSubmit = async e => {
@@ -103,15 +87,15 @@ function LoginComp() {
             </Form>
             <br />
             <Card.Text>
-              עדיין אין משתמש ? <Button variant="link" onClick={() => setModalShow(true)}>לחץ כאן </Button>
+
+              עדיין אין משתמש ?
+              <Link to="/register">
+                <Button variant="link" >לחץ כאן </Button>
+              </Link>
             </Card.Text>
           </Card.Body>
         </Card>
       </div>
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
     </div>
   )
 }

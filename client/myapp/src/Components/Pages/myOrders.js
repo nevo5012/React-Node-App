@@ -19,8 +19,7 @@ function MyOrdersComp(props) {
 
   useEffect(() => {
     if (!sessionStorage.member) {
-      alert("על מנת להמשיך עליך להתחבר למערכת");
-      props.history.push("/login")
+       props.history.push("/login")
     }
     if (member) {
       getMemberOrders();

@@ -29,16 +29,16 @@ function getTotal(num, mail) {
 
 function CheckOutComp(props) {
 
-    const [member, setMember] = useState(
+    const [member] = useState(
         getSessionStorageOrDefault('member', false)
     )
     const [order, setOrder] = useState(props.newOrder);
     const [total] = useState(
         getTotal(props.newOrder.pack_counter, props.newOrder.mailbox)
-    )
-    const [value, setValue] = useState(false)
-    const [confirm, setConfirm] = useState(false)
-    const handleChange = (val) => setValue(val);
+    );
+    const [value, setValue] = useState(false);
+    const [confirm, setConfirm] = useState(false);
+     
 
     useEffect(() => {
         setOrder(props.newOrder)
@@ -73,7 +73,7 @@ function CheckOutComp(props) {
                     <ListGroup variant="flush">
 
                         {order.order_data.map((item, index) => {
-                            return <ListGroup.Item action variant="light" key={index}>
+                            return <ListGroup.Item action variant="light" key={item._id}>
                                 {item.shelf_number + " + " + item.tracking_number}
                             </ListGroup.Item>
                         })}
@@ -96,7 +96,7 @@ function CheckOutComp(props) {
                                 {order.order_data.map((item, index) => {
                                     return <ListGroup.Item
                                         action variant="light"
-                                        key={index}>
+                                        key={item._id}>
                                         {item.shelf_number + " + " + item.tracking_number}
                                     </ListGroup.Item>
                                 })}
@@ -112,12 +112,10 @@ function CheckOutComp(props) {
                         </Card.Text>
                         <Card.Header size="lg"> סה"כ לתשלום - {total + " שקלים "}<br />
                             בחר את דרך התשלום המועדפת <br />
-                            <ButtonGroup toggle>
-                                <ToggleButtonGroup type="radio" name="options" onChange={handleChange}>
-                                    <ToggleButton value={false}>payBox</ToggleButton>
-                                    <ToggleButton value={true}>מזומן</ToggleButton>
-                                </ToggleButtonGroup>
-                            </ButtonGroup>
+                           
+                            <Button onClick={e=>setValue(true)}>מזומן</Button>
+                            <Button onClick={e=>setValue(false)}>payBox</Button>
+
                         </Card.Header>
                     </Card.Body>
                     <ButtonGroup style={{ display: value ? 'none' : 'block' }} >

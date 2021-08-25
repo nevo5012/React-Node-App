@@ -1,5 +1,6 @@
  import { BrowserRouter  } from 'react-router-dom';
 import AdminMenuComp from './Components/admin/pages/Dashboard/adminMenu.js';
+import FooterComp from './Components/footer.jsx';
 import MenuComp from './Components/menu.jsx';
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <BrowserRouter>
       <MenuComp/>
       {/* <AdminMenuComp/> */}
+      <FooterComp />
       </BrowserRouter>
       <br/>
     </div>

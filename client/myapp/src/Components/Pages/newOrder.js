@@ -19,7 +19,7 @@ function NewOrderComp(props) {
     const target = useRef(null);
 
     const [packCont, setPackCont] = useState(0);
-    const [member,setMember] = useState(
+    const [member] = useState(
         getSessionStorageOrDefault('member', false)
     )
 
@@ -68,26 +68,25 @@ function NewOrderComp(props) {
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-            
-            
+
+
         }
         setValidated(true);
     }
 
 
     const sendForm = () => {
-             let m = member;
-             let c = m.orders_counter + 1
-            member.orders_counter = c
-            
-            sessionStorage.setItem('member', JSON.stringify(member))
+        let m = member;
+        let c = m.orders_counter + 1
+        member.orders_counter = c
+
+        sessionStorage.setItem('member', JSON.stringify(member))
         setCheckOut(true)
     }
 
     useEffect(() => {
         if (!sessionStorage.member) {
-            alert("על מנת להזמין משלוח עליך להתחבר למערכת")
-            props.history.push("/login")
+             props.history.push("/login")
         }
     })
 
@@ -142,10 +141,12 @@ function NewOrderComp(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label> תוספת דואר מהתיבה ב5 שקלים? </Form.Label>{' '}
-                                <Button 
-                                variant="outline-primary" 
-                                onClick={e => setShowInput(true)}>כן</Button>{' '}
                                 <Button
+                                    size="sm"
+                                    variant="outline-primary"
+                                    onClick={e => setShowInput(true)}>כן</Button>{' '}
+                                <Button
+                                    size="sm"
                                     variant="outline-primary"
                                     onClick={e => setShowInput(false, setNewOrder({ ...newOrder, mailbox: "" }))}>
                                     לא</Button>

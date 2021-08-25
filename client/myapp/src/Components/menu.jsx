@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { authService } from '../_services/auth.service';
 import AllOrdersComp from './admin/pages/TableList/AllOrders';
 import AllMembersComp from './admin/pages/TableList/AllMembers';
+import RegisterComp from './login/register';
+import FooterComp from './footer';
  
 function getSessionStorageOrDefault(key, defaultValue) {
   const stored = sessionStorage.getItem(key);
@@ -36,10 +38,9 @@ function MenuComp() {
             height="35"
             className="d-inline-block align-top"
             alt="Logo"
-          />
+          /> משלוחים דואר-מיתר
         </Navbar.Brand>
-        <Navbar.Brand href="/">משלוחים דואר-מיתר</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-right">
             <LinkContainer style={{ display: session ? 'block' : 'none' }} to="/neworder">
@@ -52,7 +53,7 @@ function MenuComp() {
         </Navbar.Collapse>
       </Container>
 
-      <Navbar.Collapse style={{ marginRight: "20px" }} className="justify-content-end">
+      <Navbar.Collapse style={{ marginRight: "20px", marginLeft: "30px" }} className="justify-content-end">
         <Nav style={{ display: session ? 'none' : 'block', marginRight: "10px" }}>
           <Link to="/login"> <Button >התחברות</Button></Link>
         </Nav>
@@ -79,11 +80,13 @@ function MenuComp() {
             <Route path='/login' component={LoginComp} />
             <Route path='/allorders' component={AllOrdersComp} />
             <Route path='/allmembers' component={AllMembersComp} />
+            <Route path='/register' component={RegisterComp} />
+
           </Switch>
         </Col>
       </Row>
     </Container>
-
+   
   </div>;
 }
 
