@@ -1,8 +1,8 @@
 import axios from 'axios'
-import config from '../../_services/config'
 
+const apiURL = process.env.NODEJS_SERVER_URL || 'http://localhost:8000';
 var instance = axios.create({
-    baseURL: config.apiUrl
+    baseURL: apiURL
 });
 
 export function addNewOrder(order) {
