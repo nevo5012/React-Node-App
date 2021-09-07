@@ -2,7 +2,6 @@ import { Button, Card, ListGroup, } from 'react-bootstrap/'
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import CheckOutComp from './checkOut'
-import './App.css'
 
 
 

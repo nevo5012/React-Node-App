@@ -77,7 +77,7 @@ function OrderComp(props) {
                                             overlay={<Tooltip id="button-tooltip-2">בדיקת סטטוס בדואר ישראל</Tooltip>}
                                         >
                                             {({ ref, ...triggerHandler }) => (
-                                                <InfoCircle  {...triggerHandler} ref={ref} roundedcircle="true"  />
+                                                <InfoCircle  {...triggerHandler} ref={ref} />
                                             )}
                                         </OverlayTrigger>
 

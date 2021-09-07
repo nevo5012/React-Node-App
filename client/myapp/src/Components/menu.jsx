@@ -1,31 +1,19 @@
-import { Navbar, Nav, Button, Container,  Row, Col } from 'react-bootstrap/';
+import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap/';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import newOrderComp from './Pages/newOrder';
 import CheckOutComp from './Pages/checkOut';
 import OrderConfimComp from './Pages/order';
 import HomePageComp from './homePage';
 import MyOrdersComp from './Pages/myOrders';
-import LoginComp from './login/Login';
 import logo from './logo.png';
-import { useState } from 'react';
-import { authService } from '../_services/auth.service';
 import AllOrdersComp from './admin/pages/TableList/AllOrders';
 import AllMembersComp from './admin/pages/TableList/AllMembers';
-import RegisterComp from './login/register';
-import FooterComp from './footer';
- 
-function getSessionStorageOrDefault(key, defaultValue) {
-  const stored = sessionStorage.getItem(key);
-  if (!stored) {
-    return defaultValue;
-  }
-  return true;
-}
+import { AmplifySignOut } from '@aws-amplify/ui-react';
+
 
 function MenuComp() {
-  const [session] = useState(getSessionStorageOrDefault('member', false));
 
   return <div>
 
@@ -43,22 +31,19 @@ function MenuComp() {
          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-right">
-            <LinkContainer style={{ display: session ? 'block' : 'none' }} to="/neworder">
+            <LinkContainer to="/neworder">
               <Nav.Link>הזמנת משלוח</Nav.Link>
             </LinkContainer>
-            <LinkContainer style={{ display: session ? 'block' : 'none' }} to="/myorders">
+            <LinkContainer to="/myorders">
               <Nav.Link>המשלוחים שלי</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Container>
 
-      <Navbar.Collapse style={{ marginRight: "20px", marginLeft: "30px" }} className="justify-content-end">
-        <Nav style={{ display: session ? 'none' : 'block', marginRight: "10px" }}>
-          <Link to="/login"> <Button >התחברות</Button></Link>
-        </Nav>
-        <Nav style={{ display: session ? 'block' : 'none' }}>
-          <Button onClick={authService.logout} >התנתק</Button>
+      <Navbar.Collapse style={{ marginRight: "20px" }} className="justify-content-end">
+        <Nav>
+          <AmplifySignOut buttonText="התנתק" />
         </Nav>
       </Navbar.Collapse>
 
@@ -77,10 +62,8 @@ function MenuComp() {
             <Route path='/neworder' component={newOrderComp} />
             <Route path='/checkout' component={CheckOutComp} />
             <Route path='/OrderConfim' component={OrderConfimComp} />
-            <Route path='/login' component={LoginComp} />
             <Route path='/allorders' component={AllOrdersComp} />
             <Route path='/allmembers' component={AllMembersComp} />
-            <Route path='/register' component={RegisterComp} />
 
           </Switch>
         </Col>

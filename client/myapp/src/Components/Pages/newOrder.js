@@ -1,35 +1,22 @@
 import { Form, Button, Card, Tooltip, Overlay, ListGroup } from 'react-bootstrap/'
 import { useState, useEffect, useRef } from 'react';
-import './App.css'
 import OrderComp from './order';
 import CheckOutComp from './checkOut';
 import ordersUtils from './ordersUtils';
-
-
-function getSessionStorageOrDefault(key, defaultValue) {
-    const stored = sessionStorage.getItem(key);
-    if (!stored) {
-        return defaultValue;
-    }
-    return JSON.parse(stored);
-}
+import { Auth } from 'aws-amplify';
 
 function NewOrderComp(props) {
     const [show, setShow] = useState(false);
     const target = useRef(null);
 
     const [packCont, setPackCont] = useState(0);
-    const [member] = useState(
-        getSessionStorageOrDefault('member', false)
-    )
-
     const [shelfNum, setShelfNum] = useState('');
     const [trackNum, settrackNum] = useState('')
     const [newOrder, setNewOrder] = useState({
         date: ordersUtils.getDate(),
         order_data: [],
         mailbox: '',
-        member_id: member._id,
+        member_id: '',
         pack_counter: '',
         status: 0,
         payment: 0,
@@ -68,28 +55,24 @@ function NewOrderComp(props) {
             numOfPack = numOfPack + 1;
             setNewOrder({ ...newOrder, pack_counter: numOfPack })
             setPackCont(numOfPack);
-
-
         }
         setValidated(true);
     }
 
 
-    const sendForm = () => {
+    const sendForm = async () => {
+        let user = await Auth.currentAuthenticatedUser();
+        const { attributes } = user;
+        let member = {};
         let m = member;
         let c = m.orders_counter + 1
         member.orders_counter = c
-
-        sessionStorage.setItem('member', JSON.stringify(member))
-        setCheckOut(true)
+        
+        console.log(newOrder);
+        newOrder.mailbox = attributes.email;
+        newOrder.member_id = attributes.email;
+        setCheckOut(true);
     }
-
-    useEffect(() => {
-        if (!sessionStorage.member) {
-             props.history.push("/login")
-        }
-    })
-
 
     if (checkOut) {
         return (
@@ -146,7 +129,6 @@ function NewOrderComp(props) {
                                     variant="outline-primary"
                                     onClick={e => setShowInput(true)}>כן</Button>{' '}
                                 <Button
-                                    size="sm"
                                     variant="outline-primary"
                                     onClick={e => setShowInput(false, setNewOrder({ ...newOrder, mailbox: "" }))}>
                                     לא</Button>
@@ -189,8 +171,6 @@ function NewOrderComp(props) {
             </div>
         </div>
     )
-
-
 }
 
 export default NewOrderComp;

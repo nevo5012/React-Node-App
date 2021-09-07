@@ -1,21 +1,11 @@
-import { Button, Card, ListGroup, ButtonGroup, ToggleButton, ToggleButtonGroup } from 'react-bootstrap/'
-import { useEffect, useState, } from 'react';
+import { Button, Card, ListGroup, ToggleButton, ToggleButtonGroup } from 'react-bootstrap/'
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 import ordersUtils from './ordersUtils';
 import utils from './utils';
-import './App.css'
-
-function getSessionStorageOrDefault(key, defaultValue) {
-    const stored = sessionStorage.getItem(key);
-    if (!stored) {
-        return defaultValue;
-    }
-    return JSON.parse(stored);
-}
 
 function getTotal(num, mail) {
     let price = 10;
-
 
     if (num > 1) {
         price = 5;
@@ -28,21 +18,13 @@ function getTotal(num, mail) {
 }
 
 function CheckOutComp(props) {
-
-    const [member] = useState(
-        getSessionStorageOrDefault('member', false)
-    )
     const [order, setOrder] = useState(props.newOrder);
     const [total] = useState(
         getTotal(props.newOrder.pack_counter, props.newOrder.mailbox)
     );
     const [value, setValue] = useState(false);
     const [confirm, setConfirm] = useState(false);
-     
-
-    useEffect(() => {
-        setOrder(props.newOrder)
-    }, [props]);
+    const handleChange = (val) => setValue(val);
 
     const sendOrder = async () => {
         if (value === false) {
@@ -54,10 +36,6 @@ function CheckOutComp(props) {
             );
         }
         await ordersUtils.addNewOrder(order)
-
-        
-         utils.updateMember(member, member._id)
-
         setConfirm(true)
     }
 
@@ -112,22 +90,21 @@ function CheckOutComp(props) {
                         </Card.Text>
                         <Card.Header size="lg"> סה"כ לתשלום - {total + " שקלים "}<br />
                             בחר את דרך התשלום המועדפת <br />
-                           
-                            <Button onClick={e=>setValue(true)}>מזומן</Button>
-                            <Button onClick={e=>setValue(false)}>payBox</Button>
-
+                            <ToggleButtonGroup type="radio" name="options" defaultValue={value} onChange={handleChange}>
+                                <ToggleButton id="paybox" value={false}>payBox</ToggleButton>
+                                <ToggleButton id="cash" value={true}>מזומן</ToggleButton>
+                            </ToggleButtonGroup>
                         </Card.Header>
                     </Card.Body>
-                    <ButtonGroup style={{ display: value ? 'none' : 'block' }} >
+                    {!value ?
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
                             שלח הזמנה ומעבר לתשלום ב paybox
-                        </Button>
-                    </ButtonGroup>
-                    <ButtonGroup style={{ display: value ? 'block' : 'none' }} >
+                            </Button>
+                        :
                         <Button variant="outline-success" size="lg" block onClick={sendOrder}>
                             שלח הזמנה
-                        </Button>
-                    </ButtonGroup>
+                            </Button>
+                    }
                 </Card>
             </div>
         );

@@ -12,6 +12,4 @@ const updateMember = (obj,id)=>
 }
 
 
-
-
 export default {getMember,updateMember}
