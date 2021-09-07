@@ -13,6 +13,9 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.use('/health',(req, res) => {
+    res.status(200).send('Ok');
+  });
 app.use('/api/members', membersController);
 app.use('/api/orders', ordersController);
 app.use('/api/users', userController);
