@@ -64,7 +64,6 @@ function MenuComp() {
             <Route path='/OrderConfim' component={OrderConfimComp} />
             <Route path='/allorders' component={AllOrdersComp} />
             <Route path='/allmembers' component={AllMembersComp} />
-            <Route path='/register' component={RegisterComp} />
 
           </Switch>
         </Col>
