@@ -1,14 +1,18 @@
 import axios from 'axios'
+import config from '../../_services/config'
 
+var instance = axios.create({
+    baseURL: config.apiUrl
+});
 
 const getMember = (id)=>
 {
-    return axios.get("http://localhost:8000/api/members/"+id)
+    return instance.get("/api/members/"+id)
 }
 
 const updateMember = (obj,id)=>
 {
-    axios.put("http://localhost:8000/api/members/"+id,obj)
+    instance.put("/api/members/"+id,obj)
 }
 
 
