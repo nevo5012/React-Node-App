@@ -2,13 +2,12 @@ import { Table } from "react-bootstrap";
 import { useState, useEffect } from 'react';
 import ordersUtils from "../../../Pages/ordersUtils";
 import memberUtils from "../../utils/memberUtils";
-import { CgCheckO } from 'react-icons/cg';
 import { Button } from 'react-bootstrap/';
 import adminOrdersUtils from "../../utils/adminOrdersUtils";
 import { HiOutlineChat } from 'react-icons/hi';
 import optimoRouteAPI from "../../API/optimoRouteAPI";
-import OrderMessangerComp from "../messanger/orderMessanger";
 import React from "react";
+import MessageComp from "../messanger/MessageComp";
 
 
 
@@ -16,9 +15,9 @@ function AllOrdersComp() {
 
     const [orders, setOrders] = useState([]);
     const [members, setMembers] = useState([]);
-    const [member, setMember] = useState({});
+
     const [allData, setAllData] = useState([]);
-    const [date, setDate] = useState();
+    const [date,] = useState();
     const [routes, setRoutes] = useState([]);
     const [show, setShow] = useState(true);
 
@@ -57,8 +56,7 @@ function AllOrdersComp() {
                         email: m.email,
                         status: o.status,
                         payment: o.payment,
-                        notes: o.notes
-
+                        member_notes: o.member_notes
                     });
                 }
             })
@@ -188,10 +186,10 @@ function AllOrdersComp() {
                         return <tr key={item.id}   >
                             <td>
                                 <select onChange={e => updatePayment(item.id, e.target.value)} defaultValue={item.payment}>
-                                    <option value="0">לא שולם</option>
-                                    <option value="1">paybox</option>
-                                    <option value="2">bit</option>
-                                    <option value="3">מזומן</option>
+                                    <option value="0">בתהליך</option>
+                                    <option value="1">מזומן</option>
+                                    <option value="2">paybox/bit</option>
+                                    <option value="3">לא שולם</option>
                                 </select>
                             </td>
                             <td>
@@ -206,8 +204,8 @@ function AllOrdersComp() {
                             <td>{item.name}</td>
                             <td>{item.phone}</td>
                             <td>{item.address}</td>
-                              
-                             
+
+
                             {item.orderData.map((od) => {
                                 return <tr key={od._id}>
                                     <td
@@ -219,19 +217,20 @@ function AllOrdersComp() {
                                 </tr>
 
                             })}
-                      
+
                             <td>{item.member_notes}</td>
-                            <td>  <Button onClick={e=> setShow(true)} size="sm" variant="outline-success"><HiOutlineChat /></Button> </td>
+                            <td>  <Button onClick={e => setShow(true)} size="sm" variant="outline-success"><HiOutlineChat /></Button> </td>
                         </tr>
                     })}
-                    
+
                 </tbody>
             </Table>
-
+            
+                {/* <MessageComp style={{display: show? 'none' :'block'}} data={show} func={setShow} /> */}
+           
             <button onClick={e => getRoutes()}>get routes</button>
             <button onClick={e => orderByRoutes()} >sort</button>
 
-                             <OrderMessangerComp  style={{ display: show ? 'none' : 'hide' }} />  
 
         </div>
     );

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-import { Button, Modal, Form, Col, Alert } from 'react-bootstrap';
+import { Button, Modal, Form, Col, Alert, Row } from 'react-bootstrap';
 import { authService } from '../../_services/auth.service';
 import loginUtils from './loginUtils';
 
@@ -20,13 +19,16 @@ export const RegisterComp = (props) => {
         house_number: '',
         phone: '',
         email: user.email,
-        orders_counter : 0
+        orders_counter: 0
     });
     const [validated, setValidated] = useState(false);
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [ confirmPassword, setConfirmPassword] = useState("");
 
     const handleSubmit = (event) => {
+
         const form = event.currentTarget;
+        event.preventDefault();
+
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
@@ -34,41 +36,34 @@ export const RegisterComp = (props) => {
         else {
             registerNewUser()
         }
-
         setValidated(true);
     };
-
-
 
     const registerNewUser = async () => {
         let resp = await authService.register(user)
         console.log(resp.data);
         if (resp.data === 'email already in use') {
-            console.log(resp.data)
+            setShow(true)
         }
         else {
             let resp2 = await loginUtils.addNewMember(member);
             console.log(resp2.data);
-            setShow(true)
-            
+            props.history.push("/login")
         }
     }
 
-
     return (
         <div  >
-
             <Modal.Header   >
                 <Modal.Title id="contained-modal-title-vcenter">
                     הרשמה
                 </Modal.Title>
             </Modal.Header >
             <Modal.Body >
-
-                
                 <Form noValidate validated={validated} onSubmit={handleSubmit} >
+                <Form.Label>פרטי התקשרות</Form.Label>
                     <Form.Group controlId="validationCustom01">
-                        <Form.Row>
+                        <Row className="mb-2">
                             <Form.Group as={Col}  >
                                 <Form.Control
                                     type="text"
@@ -97,9 +92,9 @@ export const RegisterComp = (props) => {
                                     נא למלא שם משפחה
                                 </Form.Control.Feedback>
                             </Form.Group>
-                        </Form.Row>
+                        </Row>
 
-                        <Form.Row>
+                        <Row className="mb-2">
                             <Form.Group as={Col}>
                                 <Form.Control
                                     name="email"
@@ -125,8 +120,10 @@ export const RegisterComp = (props) => {
                                     placeholder="מספר טלפון נייד" />
                                 <Form.Control.Feedback type="invalid">אנא הכנס מספר נייד תקין </Form.Control.Feedback>
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Row>
+                        </Row>
+                        <Form.Label>סיסמה</Form.Label>
+
+                        <Row className="mb-2">
                             <Form.Group as={Col} controlId="formGridPassword">
                                 <Form.Control
                                     minLength="6"
@@ -152,22 +149,23 @@ export const RegisterComp = (props) => {
                                 />
                                 <Form.Control.Feedback type="invalid" >הסיסמה לא זהה </Form.Control.Feedback>
                             </Form.Group>
-                        </Form.Row>
-                        <Form.Group controlId="">
-                        </Form.Group>
+                        </Row>
+                        <Row>
                         <Form.Group controlId="formGridAddress1">
-                            <Form.Label>כתובת מגורים למשלוח הדואר</Form.Label>
+                            <Form.Label>כתובת מגורים למשלוח </Form.Label>
+                            
                             <Form.Control
                                 required
                                 name="street"
                                 onChange={e => setMember({ ...member, street: e.target.value })}
                                 placeholder="רחוב" />
                             <Form.Control.Feedback type="invalid">
-                                אנא הכנס כתובת מגורים
+                                  הכנס רחוב   
                             </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="formGridState">
+                        </Row>
+                        <Row className="mb-2">
+                            <Form.Group as={Col} controlId="formGridCity">
                                 <Form.Control
                                     placeholder="ישוב"
                                     required
@@ -193,22 +191,24 @@ export const RegisterComp = (props) => {
                                     אנא הכנס מספר בית
                                 </Form.Control.Feedback>
                             </Form.Group>
-                        </Form.Row>
-
+                        </Row>
                         <Button type="submit" size="lg">
                             הרשמה
                         </Button>
                     </Form.Group>
                 </Form>
-                <Alert style={{ zIndex: "+1"   }} show={show} variant="success">
-                    <Alert.Heading>מעולה !   </Alert.Heading>
-                    <Alert.Heading> נרשמת בהצלחה </Alert.Heading>
-
-                   <h5>ssad</h5>
+                <Alert 
+                onClose={() => setShow(false)} 
+                style={{ zIndex: "+1",position: 'absolute', top:'35%',right:'20%',left:'20%' }} 
+                show={show} 
+                variant="danger" 
+                dismissible>
+                    <Alert.Heading>דוא"ל זה כבר נמצא בשימוש</Alert.Heading>
+                    <p>לא ניתן להרשם עם אותו דוא"ל פעמיים, אנא נסה שנית.</p>
                     <hr />
                     <div className="d-flex justify-content-end">
-                        <Button variant="outline-success">
-                            קדימה
+                        <Button variant="light" onClick={e=> setShow(false)}>
+                            נסה שוב
                         </Button>
                     </div>
                 </Alert>

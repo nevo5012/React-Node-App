@@ -8,10 +8,23 @@ function OrderComp(props) {
         window.open("https://mypost.israelpost.co.il/lp?itemcode=" + t);
     }
 
-
+    const paymentStat= (p)=>{
+        if (p === 0) {
+            return "ממתין"
+        }
+        if (p === 1) {
+            return "שולם"
+        }
+        if (p === 2) {
+            return "שולם"
+        }
+        if (p === 3) {
+            return "לא התקבל תשלום, אנא צור קשר לביצוע התשלום"
+        }
+    }
     const delivertStat = (s) => {
         if (s === 0) {
-            return "הזמנה בתהליך משלוח"
+            return "הזמנה בתהליך קבלה "
         }
         if (s === 1) {
             return "הזמנה בתהליך הוצאה מהסניף"
@@ -49,7 +62,7 @@ function OrderComp(props) {
                         <tr>
                             <th>מס' מדף</th>
                             <th>מס' מעקב</th>
-                        </tr>
+                         </tr>
                     </thead>
                     <tbody>
                         {props.order.order_data.map((item) => {
@@ -64,17 +77,27 @@ function OrderComp(props) {
                                             overlay={<Tooltip id="button-tooltip-2">בדיקת סטטוס בדואר ישראל</Tooltip>}
                                         >
                                             {({ ref, ...triggerHandler }) => (
-                                                <InfoCircle  {...triggerHandler} ref={ref} roundedCircle />
+                                                <InfoCircle  {...triggerHandler} ref={ref} roundedcircle="true"  />
                                             )}
                                         </OverlayTrigger>
 
                                     </Button> {item.tracking_number}
                                 </td>
+                          
                             </tr>
                         })}
+                       <tr>
+                           <td>
+                               סטטוס תשלום:
+                           </td>
+                            <td>
+                                {paymentStat(props.order.payment)}
+                            </td>
+                       </tr>
                     </tbody>
                 </Table>
                 <Card.Footer style={{ display: props.packCont ? 'none' : 'block' }}>
+                    
                     <small className="text-muted"> הזמנה מתאריך - {props.order.date}   </small>
                 </Card.Footer>
             </Card>

@@ -17,7 +17,7 @@ function HomePageComp() {
 
 
     return (
-        <div className="text-center"   style={{marginTop : 100, marginBottom:"20%"}} >
+        <div className="text-center home-page"   style={{marginTop : 100,}} >
             <Container>
                 <Row className="justify-content-center" >
                     <Col md="auto"><h1 className="Home1" >משלוחים מדואר מיתר</h1></Col>
