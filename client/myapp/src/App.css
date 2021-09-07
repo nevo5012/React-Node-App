@@ -49,3 +49,11 @@
      
   font-size: 1vw;
   }
+
+  amplify-authenticator {
+    direction: rtl;
+  }
+
+  :host .section {
+    text-align: right;
+  }

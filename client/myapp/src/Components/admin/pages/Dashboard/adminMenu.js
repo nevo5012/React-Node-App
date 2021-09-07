@@ -4,7 +4,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Route, Link } from "react-router-dom";
 import AllOrdersComp from '../TableList/AllOrders';
 import AllMembersComp from '../TableList/AllMembers';
-import LoginComp from '../../../login/Login';
 import logo from '../../../logo.png' 
  
 function AdminMenuComp() {

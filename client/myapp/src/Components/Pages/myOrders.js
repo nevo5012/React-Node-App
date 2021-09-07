@@ -2,40 +2,24 @@ import React, { useEffect, useState } from "react";
 import ordersUtils from './ordersUtils'
 import { Card } from "react-bootstrap";
 import OrderComp from "./order";
-
-function getSessionStorageOrDefault(key, defaultValue) {
-  const stored = sessionStorage.getItem(key);
-  if (!stored) {
-    return defaultValue;
-  }
-  return JSON.parse(stored);
-}
+import { Auth } from 'aws-amplify';
 
 function MyOrdersComp(props) {
-  const [orders, setOrders] = useState()
-  const [member] = useState(
-    getSessionStorageOrDefault('member', false)
-  )
+  const [orders, setOrders] = useState();
 
   useEffect(() => {
-    if (!sessionStorage.member) {
-       props.history.push("/login")
-    }
-    if (member) {
-      getMemberOrders();
-    }
-  }, [])
-
-
-  const getMemberOrders = () => {
-
-    let memberId = member._id;
-    ordersUtils.getByMemberId({ memberId }).then(resp => {
+    getMemberOrders().then(resp => {
       let orders = resp.data.orderResult;
       if (orders) {
         setOrders(orders.reverse());
       }
     });
+  },[])
+  
+  const getMemberOrders = async () => {
+    let user = await Auth.currentAuthenticatedUser();
+    const { attributes } = user;
+    return ordersUtils.getByMemberId(attributes.email);
   }
 
   const App = () => <List list={orders} />;
@@ -44,7 +28,6 @@ function MyOrdersComp(props) {
       <OrderComp key={item._id} order={item} />
     ))
   );
-
 
 
   if (orders) {
@@ -63,6 +46,7 @@ function MyOrdersComp(props) {
       </div>
     )
   }
+
   if (!orders) {
     return (
       <div>
@@ -71,16 +55,12 @@ function MyOrdersComp(props) {
             <Card.Title>הזמנות האחרונות</Card.Title>
           </Card.Header>
           <Card.Body>
-
             פה יופיעו ההזמנות האחרונות שלך, לאחר שתזמין בפעם הראשונה.
           </Card.Body>
         </Card>
       </div>
     )
   }
-
-
 }
-
 
 export default MyOrdersComp;

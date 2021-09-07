@@ -14,7 +14,7 @@ const getOrder =(id) =>
 
 export function getByMemberId(memberId)
 {
-     return axios.post("http://localhost:8000/api/orders/memberid",memberId)
+     return axios.post("http://localhost:8000/api/orders/memberid",{memberId: memberId})
 }
 
 export async function getALL()
@@ -34,4 +34,5 @@ export async function getALL()
     currentDate = hh + ":" + min + " " + dd + '/' + mm + '/' + yyyy;
     return currentDate;
 }
-export default {getDate,addNewOrder,getOrder,getByMemberId,getALL };
+
+export default {getDate,addNewOrder,getByMemberId,getALL};
