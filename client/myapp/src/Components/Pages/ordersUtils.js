@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 console.log(process.env);
-console.log(process.env.NODEJS_SERVER_URL);
+console.log(process.env.REACT_APP_NODEJS_SERVER_URL);
 
-const apiURL = process.env.NODEJS_SERVER_URL || 'http://localhost:8000';
+const apiURL = process.env.REACT_APP_NODEJS_SERVER_URL || 'http://localhost:8000';
 var instance = axios.create({
     baseURL: apiURL
 });
