@@ -42,8 +42,8 @@ const App = () => {
     </div>
   ) : (
     <AmplifyAuthContainer>
-      <AmplifyAuthenticator>
-        <AmplifySignUp
+      <AmplifyAuthenticator usernameAlias="email">
+        <AmplifySignUp 
           slot="sign-up"
           headerText="יצירת משתמש חדש"
           submitButtonText="צור חשבון"
