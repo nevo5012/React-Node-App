@@ -1,10 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose, { Connection } from 'mongoose'
 
-mongoose.connect('mongodb://localhost:27017/deliveryDB', { 
+const DB_CONNECTION = process.env.CONNECTION_STRING || 'mongodb://localhost:27017/deliveryDB';
+mongoose.connect(DB_CONNECTION, { 
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
-
 });
 
  
