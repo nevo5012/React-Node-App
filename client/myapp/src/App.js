@@ -43,9 +43,8 @@ const App = () => {
   ) : (
     <AmplifyAuthContainer>
       <AmplifyAuthenticator usernameAlias="email">
-        <AmplifySignUp
+        <AmplifySignUp 
           slot="sign-up"
-          usernameAlias="email"
           headerText="יצירת משתמש חדש"
           submitButtonText="צור חשבון"
           formFields={[

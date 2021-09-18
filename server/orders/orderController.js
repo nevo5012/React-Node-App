@@ -67,3 +67,9 @@ appRoute.route('/getall').get(async function(req,resp)
 
 })
 export default appRoute;
+
+
+// /orders - get all
+// /orders/id - get one be it
+// /order - create (POST)
+// /order - update (PUT) 
