@@ -1,9 +1,4 @@
-import axios from 'axios'
-
-const apiURL = process.env.REACT_APP_NODEJS_SERVER_URL || 'http://localhost:8000';
-var instance = axios.create({
-    baseURL: apiURL
-});
+import {instance} from '../../_services/auth.service'
 
 export function addNewOrder(order) {
     return instance.post("/api/orders", order)

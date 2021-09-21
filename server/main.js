@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import './configs/database.js'
+import {validJWTNeeded} from './auth/auth.middleware.js'
 
 import ordersController from './orders/orderController.js'
 
